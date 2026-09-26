@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Three Twin — Architecture</title>
+  <meta name="description" content="Public documentation, architecture, and mathematical model for the Three Twin project." />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]'], ['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top">Three Twin</a>
+    <span class="subtitle">Architecture Explorer</span>
+    <a class="repo-link" href="https://github.com/thatao72/three-twin-docs">GitHub</a>
+  </header>
+
+  <div class="layout" id="top">
+    <aside class="sidebar">
+      <div class="sidebar-label">On this page</div>
+      <nav id="toc" aria-label="Table of contents"></nav>
+    </aside>
+
+    <main>
+      <div class="status-note">
+        Public explanatory documentation. Canonical architectural authority remains in the source architecture repository.
+      </div>
+      <article id="content" class="document">
+        <p>Loading architecture documentation…</p>
+      </article>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('load', async () => {
+      const content = document.getElementById('content');
+      try {
+        const response = await fetch('content/architecture.md');
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const markdown = await response.text();
+        content.innerHTML = marked.parse(markdown);
+
+        content.querySelectorAll('pre > code.language-mermaid').forEach((code) => {
+          const pre = code.parentElement;
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = code.textContent;
+          pre.replaceWith(div);
+        });
+
+        const slugCounts = new Map();
+        content.querySelectorAll('h2, h3').forEach((heading) => {
+          const base = heading.textContent
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .trim()
+            .replace(/\s+/g, '-');
+          const count = slugCounts.get(base) || 0;
+          slugCounts.set(base, count + 1);
+          heading.id = count ? `${base}-${count + 1}` : base;
+        });
+
+        const toc = document.getElementById('toc');
+        content.querySelectorAll('h2').forEach((heading) => {
+          const link = document.createElement('a');
+          link.href = `#${heading.id}`;
+          link.textContent = heading.textContent;
+          toc.appendChild(link);
+        });
+
+        mermaid.initialize({ startOnLoad: false, theme: 'neutral', securityLevel: 'strict' });
+        await mermaid.run({ querySelector: '.mermaid' });
+        if (window.MathJax?.typesetPromise) await MathJax.typesetPromise([content]);
+      } catch (error) {
+        content.innerHTML = `<h1>Documentation unavailable</h1><p>${error.message}</p>`;
+      }
+    });
+  </script>
+</body>
+</html>
