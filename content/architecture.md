@@ -79,111 +79,85 @@ The Teaching Twin stores pedagogical knowledge and policy. Active instructional 
 A central state-management principle is the separation of:
 
 1. **Observation / evidence** — what happened or was observed.
-2. **Interpretation / reasoning** — what the system infers from that evidence.
-3. **Persistent Twin state** — accepted structured memory retained for future use.
+2. **Interpretation / reasoning** — what an AI agent or deterministic process infers from that evidence.
+3. **Persistent Twin state** — the accepted structured memory retained for future use.
 
-This separation applies throughout the architecture.
+For example, a learner response is evidence. A diagnosis inferred from that response is reasoning. An accepted learner-state update is persistent Twin state.
 
-A learner response is evidence. A semantic interpretation of that response is a reasoning artifact. A diagnostic hypothesis is a candidate explanation. A learner-state proposal is a proposed update. Persistence occurs only after the applicable admission and governance boundary accepts the change.
-
-The same principle applies to the other Twins: persistent educational knowledge and pedagogical policy remain distinct from the runtime reasoning that consumes them.
+This separation lets the system use powerful probabilistic or model-based reasoning without treating every generated interpretation as durable truth.
 
 ```mermaid
 flowchart LR
 
     O["Observation / Evidence"]
     R["Interpretation / Reasoning"]
-    P["Proposed State Change"]
-    A["Admission / Validation"]
-    S["Persistent Twin State"]
+    P["Accepted Persistent State"]
 
     O --> R
-    R --> P
-    P --> A
-    A --> S
+    R -->|"admission / validation"| P
 ```
 
 ---
 
 ## 4. The Learning Feedback Loop
 
-Operationally, the system learns about a learner through repeated observation and action.
+The operational system is an assessment-driven observation and action loop.
 
 ```mermaid
-flowchart TB
+flowchart LR
 
-    subgraph MEMORY["PERSISTENT EDUCATIONAL MEMORY"]
-        direction LR
+    J["Assessment<br/><b>J(t)</b>"]
+    A["Learner<br/>Response"]
+    E["Assessment<br/>& Evidence"]
+    L["Learner Twin<br/><b>X(K,R)</b>"]
+    PD["Pedagogical<br/>Decision"]
+    EA["Educational<br/>Action"]
 
-        K["KNOWLEDGE TWIN<br/><br/>Educational-world memory"]
-        L["LEARNER TWIN<br/><br/>Estimated learner state"]
-        T["TEACHING TWIN<br/><br/>Pedagogical memory"]
-    end
-
-    subgraph LOOP["LEARNER-SPECIFIC FEEDBACK LOOP"]
-        direction LR
-
-        J["Assessment"]
-        OBS["Learner Response<br/>& Evidence"]
-        INF["Interpretation<br/>& Inference"]
-        PD["Pedagogical<br/>Decision"]
-        EA["Educational<br/>Action"]
-
-        J --> OBS
-        OBS --> INF
-        INF --> PD
-        PD --> EA
-        EA -->|"next observation"| J
-    end
-
-    K -->|"domain and observation semantics"| J
-    T -->|"assessment and pedagogical policy"| J
-    INF -->|"accepted update"| L
-    L -->|"learner context"| PD
-    T -->|"decision and action policy"| PD
+    J --> A
+    A --> E
+    E --> L
+    L --> PD
+    PD --> EA
+    EA -->|"next assessment"| J
 ```
 
-The loop can be summarized as:
+Assessment generates evidence about the learner. That evidence is interpreted and admitted into learner state. The updated learner state informs pedagogical decisions, which are realized as educational actions and lead to future observations.
 
-\[
-\boxed{
-\text{Assessment}
-\rightarrow
-\text{Evidence}
-\rightarrow
-\text{Learner-State Update}
-\rightarrow
-\text{Pedagogical Decision}
-\rightarrow
-\text{Educational Action}
-\rightarrow
-\text{Next Assessment}
-}
-\]
+The Twins provide persistent structure around this loop:
 
-The three Twins support this loop in different ways:
-
-- Knowledge provides the domain and observation semantics needed to interpret what is being assessed.
-- Learner preserves the evolving learner-specific state inferred from accepted evidence.
-- Teaching provides assessment, decision, and educational-action policy.
+- the **Knowledge Twin** supplies educational-world semantics and observation coordinates,
+- the **Learner Twin** retains accepted learner-specific state,
+- the **Teaching Twin** supplies assessment and pedagogical knowledge used to interpret, decide, and act.
 
 ---
 
-## 5. Assessment and the \(K\times R\) Observation Model
+## 5. Assessment and the K × R Observation Model
 
-For bounded mathematical assessment, the architecture uses explicit Knowledge and Responsibility coordinates.
+For mathematical assessment, the architecture makes the observation target explicit.
 
 Let:
 
-- \(K\) = mathematical knowledge elements,
-- \(R\) = observable mathematical responsibilities,
-- \(\Omega \subseteq K\times R\) = admitted observable Knowledge/Responsibility pairs.
+\[
+K = \text{mathematical knowledge elements}
+\]
 
-This creates an explicit observation space for learner evidence.
+\[
+R = \text{observable mathematical responsibilities}
+\]
 
-A learner may demonstrate different levels of performance on the same Knowledge under different responsibilities. For example, recognising a mathematical structure and executing a procedure on that structure may correspond to different observable coordinates. Preserving the pair allows the Learner Twin to retain that distinction.
+and let
 
-An admitted assessment item is written as:
+\[
+\Omega \subseteq K\times R
+\]
+
+be the admitted observation relation.
+
+A learner-state coordinate is therefore not merely a Knowledge element. It identifies both **what mathematical content is involved** and **what observable responsibility the learner is being asked to perform**.
+
+For example, the same mathematical concept may support different observable responsibilities such as recognizing, executing, explaining, or justifying. Keeping the exact \((K,R)\) coordinate allows the Learner Twin to represent those performances separately.
+
+An admitted assessment item is represented as:
 
 \[
 J=(M,A)
@@ -192,27 +166,26 @@ J=(M,A)
 where:
 
 - \(M\) is the mathematical problem facet,
-- \(A\) is the assessment specification facet.
+- \(A\) is the assessment specification.
 
-The assessment specification carries the governed observation targets and criteria needed to attribute learner evidence to exact \((K,R)\) coordinates.
+The AssessmentItem binds Knowledge-side problem semantics and Teaching-side assessment semantics into a governed observation contract.
 
-Conceptually:
+```mermaid
+flowchart LR
 
-```text
-Knowledge Twin                       Teaching Twin
-MathematicalProblem              AssessmentSpecification
-        \                            /
-         \                          /
-          ---- AssessmentItem -----
+    K["Knowledge Twin<br/>Mathematical Problem"]
+    T["Teaching Twin<br/>Assessment Specification"]
+    J["AssessmentItem<br/><b>J = (M,A)</b>"]
+
+    K --> J
+    T --> J
 ```
-
-The AssessmentItem therefore acts as a version-bound observation contract between domain content and assessment semantics.
 
 ---
 
 ## 6. Canonical Mathematical Flow
 
-The current bounded execution model can be summarized as:
+The learner-specific execution path can be summarized as:
 
 \[
 (K,R,\Omega,P)
@@ -231,17 +204,20 @@ The current bounded execution model can be summarized as:
 
 where:
 
-- \(P\) = teaching / pedagogical policy,
-- \(J=(M,A)\) = admitted assessment item,
-- \(A_{raw}\) = raw learner answer,
-- \(A_{sem}\) = semantically interpreted answer,
-- \(D\) = governed assessment facts,
-- \(E_{K,R}\) = evidence attributed to an exact Knowledge/Responsibility pair,
-- \(\hat X\) = locally inferred learner-state candidate,
-- \(Z\) = admitted learner-state update,
-- \(X_{K,R}\) = persistent learner state,
-- \(PD_{K,R}\) = pedagogical decision,
-- \(EA\) = educational action.
+- \(K\) = mathematical knowledge elements
+- \(R\) = mathematical responsibilities
+- \(\Omega \subseteq K \times R\) = admitted observation relation
+- \(P\) = teaching/pedagogical policy
+- \(J=(M,A)\) = admitted assessment item
+- \(A_{raw}\) = raw learner answer
+- \(A_{sem}\) = semantically interpreted answer
+- \(D\) = governed assessment facts
+- \(E_{K,R}\) = evidence attributed to an exact knowledge/responsibility pair
+- \(\hat X\) = locally inferred learner-state candidate
+- \(Z\) = admitted learner-state update
+- \(X_{K,R}\) = persistent learner state
+- \(PD_{K,R}\) = pedagogical decision
+- \(EA\) = educational action
 
 The principal transformations are:
 
@@ -372,15 +348,15 @@ ThreeTwinArchitectureNext is designed to preserve traceability from conceptual s
 ```mermaid
 flowchart TB
 
-    C["1. CONCEPTUAL ARCHITECTURE<br/><br/>Knowledge Twin · Learner Twin · Teaching Twin<br/>AI reasoning and action"]
+    C["<b>1. CONCEPTUAL ARCHITECTURE</b><br/>Knowledge Twin · Learner Twin · Teaching Twin · AI reasoning and action"]
 
-    M["2. MATHEMATICAL MODEL<br/><br/>K, R, Ω, P, J, S, δ, T,<br/>U_local, Admission, U_long, PD"]
+    M["<b>2. MATHEMATICAL MODEL</b><br/>K, R, Ω, P, J, S, δ, T, U_local, Admission, U_long, PD"]
 
-    A["3. GOVERNED AUTHORITY<br/><br/>Knowledge · Assessment · Teaching<br/>Product Architecture"]
+    A["<b>3. GOVERNED AUTHORITY</b><br/>Knowledge · Assessment · Teaching · Product Architecture"]
 
-    I["4. INSTANCE & PERSISTENCE<br/><br/>Repository YAML / JSON<br/>Runtime transformations<br/>Interaction SQLite<br/>Learner-State SQLite"]
+    I["<b>4. INSTANCE & PERSISTENCE</b><br/>Repository YAML / JSON · Runtime transformations · Interaction SQLite · Learner-State SQLite"]
 
-    X["5. EXECUTABLE IMPLEMENTATION<br/><br/>domain/* · services/*<br/>application/* · infrastructure/*"]
+    X["<b>5. EXECUTABLE IMPLEMENTATION</b><br/>domain/* · services/* · application/* · infrastructure/*"]
 
     C --> M
     M --> A
@@ -424,7 +400,7 @@ This vertical traceability complements the horizontal learner feedback loop.
 | **\(J=(M,A)\)** Assessment item | `authority/assessment/*` | Assessment items and templates | **Repository/code-backed + runtime** | `domain/assessment_item/bounded_items.py`, `bounded_templates.py`, `model.py` |
 | **\(A_{raw}\)** Raw answer | Interaction/execution semantics | `LearnerResponse.learner_answer` | **Database-persistent — SQLite `interaction_evidence`, kind=`response`** | `application/interaction/*`, `infrastructure/interaction_store/sqlite.py` |
 | **\(S:(J,A_{raw})\to A_{sem}\)** | Semantic-interpretation authority | Semantically interpreted answer | **Runtime-transient** | `services/semantic_interpretation/service.py` |
-| **\(\delta:(A_{sem},J)\to D\)** | `authority/product_architecture/assessment_semantics.yaml` | Governed assessment facts | **Runtime-transient** | `services/assessment/answer_assessment.py`, `verification_projection.py` |
+| **\(delta:(A_{sem},J)\to D\)** | `authority/product_architecture/assessment_semantics.yaml` | Governed assessment facts | **Runtime-transient** | `services/assessment/answer_assessment.py`, `verification_projection.py` |
 | **\(T:D\to E_{K,R}\)** | Knowledge/Responsibility/Observation authority + evidence semantics | `SessionKnowledgeElementEvidence` | **Runtime-transient** | `services/evidence_projection/*` |
 | **\(U_{local}:E_{K,R}\to\hat X\)** | `authority/product_architecture/probabilistic_learner_state.yaml` | Locally inferred learner-state candidate | **Runtime-transient** | `services/learner_state/inference.py`, `probabilistic_update.py` |
 | **\(Admission:\hat X\to Z\)** | `authority/product_architecture/learner_twin_state_admission.yaml` | Admitted state update | **Runtime until accepted** | `services/learner_state/admission.py` |
