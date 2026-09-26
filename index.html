@@ -105,13 +105,46 @@
       }
     });
 
+    function escapeHtml(text) {
+      return text
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;');
+    }
+
+    function protectMath(markdown) {
+      const math = [];
+      const token = (value) => {
+        const index = math.push(value) - 1;
+        return `TTMATHPLACEHOLDER${index}END`;
+      };
+
+      // Protect display math first so its contents never pass through Markdown parsing.
+      let protectedMarkdown = markdown.replace(/\\\[([\s\S]*?)\\\]/g, (match) => token(match));
+      protectedMarkdown = protectedMarkdown.replace(/\\\(([\s\S]*?)\\\)/g, (match) => token(match));
+
+      return {
+        markdown: protectedMarkdown,
+        restore(html) {
+          return html.replace(/TTMATHPLACEHOLDER(\d+)END/g, (_, index) => escapeHtml(math[Number(index)]));
+        }
+      };
+    }
+
+    async function waitForMathJax() {
+      if (window.MathJax?.startup?.promise) {
+        await window.MathJax.startup.promise;
+      }
+    }
+
     async function render() {
       const target = document.getElementById('content');
       try {
         const response = await fetch('./content/architecture.md', { cache: 'no-store' });
         if (!response.ok) throw new Error(`Unable to load architecture.md (${response.status})`);
         const markdown = await response.text();
-        target.innerHTML = marked.parse(markdown);
+        const protectedMath = protectMath(markdown);
+        target.innerHTML = protectedMath.restore(marked.parse(protectedMath.markdown));
 
         const codeBlocks = [...target.querySelectorAll('pre code.language-mermaid')];
         for (const code of codeBlocks) {
@@ -123,7 +156,8 @@
         }
 
         await mermaid.run({ querySelector: '.mermaid' });
-        if (window.MathJax?.typesetPromise) await MathJax.typesetPromise([target]);
+        await waitForMathJax();
+        if (window.MathJax?.typesetPromise) await window.MathJax.typesetPromise([target]);
       } catch (error) {
         target.innerHTML = `<div class="error">${error.message}</div>`;
       }
