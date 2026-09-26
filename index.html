@@ -8,7 +8,10 @@
   <link rel="stylesheet" href="assets/style.css" />
   <script>
     window.MathJax = {
-      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]'], ['$$', '$$']] },
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']]
+      },
       svg: { fontCache: 'global' }
     };
   </script>
@@ -40,13 +43,49 @@
   </div>
 
   <script>
+    const escapeHtml = (value) => value
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;');
+
+    function protectMath(markdown) {
+      const expressions = [];
+      const stash = (match) => {
+        const token = `@@THREETWIN_MATH_${expressions.length}@@`;
+        expressions.push(match);
+        return token;
+      };
+
+      // Protect TeX before Marked interprets backslashes as Markdown escapes.
+      // Display forms are handled first so inline matching cannot consume them.
+      let protectedMarkdown = markdown
+        .replace(/\\\[[\s\S]*?\\\]/g, stash)
+        .replace(/\$\$[\s\S]*?\$\$/g, stash)
+        .replace(/\\\([\s\S]*?\\\)/g, stash);
+
+      return {
+        markdown: protectedMarkdown,
+        restore(html) {
+          return expressions.reduce(
+            (result, expression, index) => result.replaceAll(
+              `@@THREETWIN_MATH_${index}@@`,
+              escapeHtml(expression)
+            ),
+            html
+          );
+        }
+      };
+    }
+
     window.addEventListener('load', async () => {
       const content = document.getElementById('content');
       try {
         const response = await fetch('content/architecture.md');
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const markdown = await response.text();
-        content.innerHTML = marked.parse(markdown);
+
+        const protectedMath = protectMath(markdown);
+        content.innerHTML = protectedMath.restore(marked.parse(protectedMath.markdown));
 
         content.querySelectorAll('pre > code.language-mermaid').forEach((code) => {
           const pre = code.parentElement;
