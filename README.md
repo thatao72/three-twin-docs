@@ -1,20 +1,11 @@
-# three-twin-docs
+# ThreeTwinDocs
 
-Public documentation, architecture, and mathematical model for the Three Twin project.
+Public explanatory documentation for ThreeTwinArchitectureNext.
 
-## Repository role
+The documentation is intended to explain the architecture from enduring principles through mathematical realization and runtime traceability. It is descriptive, not authoritative: current architecture authority remains in `thatao72/three-twin-architecture-next`.
 
-This repository is a public, human-readable projection of the Three Twin architecture. It is not the canonical architecture authority.
+The primary architecture explanation is:
 
-## Current structure
+- `content/architecture.md`
 
-- `content/architecture.md` — source Markdown for the initial architecture documentation.
-- `index.html` — lightweight GitHub Pages presentation shell.
-- `assets/style.css` — site styling.
-- `AGENTS.md` — documentation and publication rules.
-
-The site renders the Markdown directly in the browser and supports Mermaid diagrams and MathJax equations without a documentation framework.
-
-## Publishing
-
-Configure GitHub Pages to deploy from the `main` branch at the repository root (`/`). Once enabled, updates to the Markdown source are reflected in the published site without maintaining a duplicate HTML copy of the architecture text.
+The published site renders this material for readers who do not need repository-level implementation context first.
