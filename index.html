@@ -3,125 +3,124 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Three Twin — Architecture</title>
-  <meta name="description" content="Public documentation, architecture, and mathematical model for the Three Twin project." />
-  <link rel="stylesheet" href="assets/style.css" />
+  <title>ThreeTwinArchitectureNext</title>
+  <meta name="description" content="Architecture overview for ThreeTwinArchitectureNext: persistent educational memory, AI reasoning and action, learner feedback, and runtime traceability." />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
   <script>
     window.MathJax = {
-      tex: {
-        inlineMath: [['\\(', '\\)']],
-        displayMath: [['\\[', '\\]'], ['$$', '$$']]
-      },
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
       svg: { fontCache: 'global' }
     };
   </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --fg: #171717;
+      --muted: #666;
+      --border: #ddd;
+      --code-bg: #f6f8fa;
+      --link: #0969da;
+      --content-width: 1040px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111;
+        --fg: #e8e8e8;
+        --muted: #aaa;
+        --border: #333;
+        --code-bg: #1b1f23;
+        --link: #58a6ff;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    main {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 48px 28px 80px;
+    }
+    h1 { font-size: 2.2rem; line-height: 1.15; margin: 0 0 1.5rem; }
+    h2 { margin-top: 3rem; border-bottom: 1px solid var(--border); padding-bottom: .35rem; }
+    h3 { margin-top: 2rem; }
+    p, li { max-width: 78ch; }
+    a { color: var(--link); }
+    code {
+      background: var(--code-bg);
+      padding: .12rem .3rem;
+      border-radius: 4px;
+    }
+    pre {
+      overflow-x: auto;
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 8px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      display: block;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: .55rem .7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    blockquote {
+      margin-left: 0;
+      padding-left: 1rem;
+      border-left: 3px solid var(--border);
+      color: var(--muted);
+    }
+    .status { color: var(--muted); margin-bottom: 2rem; }
+    .error { color: #b42318; white-space: pre-wrap; }
+    .mermaid { margin: 2rem 0; overflow-x: auto; }
+  </style>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#top">Three Twin</a>
-    <span class="subtitle">Architecture Explorer</span>
-    <a class="repo-link" href="https://github.com/thatao72/three-twin-docs">GitHub</a>
-  </header>
-
-  <div class="layout" id="top">
-    <aside class="sidebar">
-      <div class="sidebar-label">On this page</div>
-      <nav id="toc" aria-label="Table of contents"></nav>
-    </aside>
-
-    <main>
-      <div class="status-note">
-        Public explanatory documentation. Canonical architectural authority remains in the source architecture repository.
-      </div>
-      <article id="content" class="document">
-        <p>Loading architecture documentation…</p>
-      </article>
-    </main>
-  </div>
-
+  <main>
+    <div class="status">ThreeTwinArchitectureNext architecture documentation</div>
+    <article id="content">Loading architecture documentation…</article>
+  </main>
   <script>
-    const escapeHtml = (value) => value
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;');
+    mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' });
 
-    function protectMath(markdown) {
-      const expressions = [];
-      const stash = (match) => {
-        const token = `@@THREETWIN_MATH_${expressions.length}@@`;
-        expressions.push(match);
-        return token;
-      };
-
-      // Protect TeX before Marked interprets backslashes as Markdown escapes.
-      // Display forms are handled first so inline matching cannot consume them.
-      let protectedMarkdown = markdown
-        .replace(/\\\[[\s\S]*?\\\]/g, stash)
-        .replace(/\$\$[\s\S]*?\$\$/g, stash)
-        .replace(/\\\([\s\S]*?\\\)/g, stash);
-
-      return {
-        markdown: protectedMarkdown,
-        restore(html) {
-          return expressions.reduce(
-            (result, expression, index) => result.replaceAll(
-              `@@THREETWIN_MATH_${index}@@`,
-              escapeHtml(expression)
-            ),
-            html
-          );
-        }
-      };
-    }
-
-    window.addEventListener('load', async () => {
-      const content = document.getElementById('content');
+    async function render() {
+      const target = document.getElementById('content');
       try {
-        const response = await fetch('content/architecture.md');
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const response = await fetch('./content/architecture.md', { cache: 'no-store' });
+        if (!response.ok) throw new Error(`Unable to load architecture.md (${response.status})`);
         const markdown = await response.text();
+        target.innerHTML = marked.parse(markdown);
 
-        const protectedMath = protectMath(markdown);
-        content.innerHTML = protectedMath.restore(marked.parse(protectedMath.markdown));
-
-        content.querySelectorAll('pre > code.language-mermaid').forEach((code) => {
+        const codeBlocks = [...target.querySelectorAll('pre code.language-mermaid')];
+        for (const code of codeBlocks) {
           const pre = code.parentElement;
           const div = document.createElement('div');
           div.className = 'mermaid';
           div.textContent = code.textContent;
           pre.replaceWith(div);
-        });
+        }
 
-        const slugCounts = new Map();
-        content.querySelectorAll('h2, h3').forEach((heading) => {
-          const base = heading.textContent
-            .toLowerCase()
-            .replace(/[^a-z0-9\s-]/g, '')
-            .trim()
-            .replace(/\s+/g, '-');
-          const count = slugCounts.get(base) || 0;
-          slugCounts.set(base, count + 1);
-          heading.id = count ? `${base}-${count + 1}` : base;
-        });
-
-        const toc = document.getElementById('toc');
-        content.querySelectorAll('h2').forEach((heading) => {
-          const link = document.createElement('a');
-          link.href = `#${heading.id}`;
-          link.textContent = heading.textContent;
-          toc.appendChild(link);
-        });
-
-        mermaid.initialize({ startOnLoad: false, theme: 'neutral', securityLevel: 'strict' });
         await mermaid.run({ querySelector: '.mermaid' });
-        if (window.MathJax?.typesetPromise) await MathJax.typesetPromise([content]);
+        if (window.MathJax?.typesetPromise) await MathJax.typesetPromise([target]);
       } catch (error) {
-        content.innerHTML = `<h1>Documentation unavailable</h1><p>${error.message}</p>`;
+        target.innerHTML = `<div class="error">${error.message}</div>`;
       }
-    });
+    }
+
+    render();
   </script>
 </body>
 </html>
