@@ -346,22 +346,15 @@ The principal persistence classes are:
 ThreeTwinArchitectureNext is designed to preserve traceability from conceptual semantics to running code.
 
 ```mermaid
-flowchart TB
+flowchart LR
 
-    C["<b>1. CONCEPTUAL ARCHITECTURE</b><br/>Knowledge Twin · Learner Twin · Teaching Twin · AI reasoning and action"]
-
+    C["<b>1. CONCEPTUAL ARCHITECTURE</b><br/>Three Twins + AI reasoning/action"]
     M["<b>2. MATHEMATICAL MODEL</b><br/>K, R, Ω, P, J, S, δ, T, U_local, Admission, U_long, PD"]
-
     A["<b>3. GOVERNED AUTHORITY</b><br/>Knowledge · Assessment · Teaching · Product Architecture"]
-
-    I["<b>4. INSTANCE & PERSISTENCE</b><br/>Repository YAML / JSON · Runtime transformations · Interaction SQLite · Learner-State SQLite"]
-
+    I["<b>4. INSTANCE & PERSISTENCE</b><br/>Repository state · Runtime transforms · Interaction DB · Learner-state DB"]
     X["<b>5. EXECUTABLE IMPLEMENTATION</b><br/>domain/* · services/* · application/* · infrastructure/*"]
 
-    C --> M
-    M --> A
-    A --> I
-    I --> X
+    C --> M --> A --> I --> X
 ```
 
 The intended traceability relation is:
@@ -390,24 +383,24 @@ This vertical traceability complements the horizontal learner feedback loop.
 
 | Mathematical object / map | Authority / definition | Concrete instance | Lifecycle / persistence | Primary implementation |
 |---|---|---|---|---|
-| **\(K\)** Knowledge | `authority/knowledge/bounded_mathematical_elements_v1.yaml` | Admitted mathematical elements | **Repository-persistent — YAML** | Knowledge and evidence consumers |
-| **\(R\)** Responsibility | `authority/knowledge/bounded_responsibilities_v1.yaml` | Admitted mathematical responsibilities | **Repository-persistent — YAML** | Evidence consumers |
-| **\(\Omega \subseteq K\times R\)** | `authority/knowledge/bounded_responsibility_observation_v1.yaml` | Admitted observable \(K,R\) pairs | **Repository-persistent — YAML** | Knowledge/evidence projection |
-| **Knowledge Twin content** | Knowledge domain model and governed boundary | Concepts, misconceptions, questions, practice tasks, explanation patterns | **Repository-persistent — `twin_substrate/knowledge/knowledge_twin.json`** | `services/knowledge_access/service.py` |
-| **\(P\)** Teaching policy | `authority/teaching/bounded_pedagogical_decision_policy_v1.yaml` and related Teaching authority | Strategies, intervention rules, diagnostic bindings and policy parameters | **Repository-persistent — authority YAML + `twin_substrate/teaching/teaching_twin.json`** | `services/teaching_access/service.py` |
-| **\(G\)** Assessment-item generation | `authority/product_architecture/execution_dependency_model.yaml` + Assessment authority | Candidate assessment item | **Runtime** | `domain/assessment_item/authoring.py`, `construction.py` |
-| **\(Adm_J\)** Item admission | Assessment authority | Admitted assessment item | **Runtime, with repository-backed bounded instances** | `domain/assessment_item/admission.py` |
-| **\(J=(M,A)\)** Assessment item | `authority/assessment/*` | Assessment items and templates | **Repository/code-backed + runtime** | `domain/assessment_item/bounded_items.py`, `bounded_templates.py`, `model.py` |
-| **\(A_{raw}\)** Raw answer | Interaction/execution semantics | `LearnerResponse.learner_answer` | **Database-persistent — SQLite `interaction_evidence`, kind=`response`** | `application/interaction/*`, `infrastructure/interaction_store/sqlite.py` |
-| **\(S:(J,A_{raw})\to A_{sem}\)** | Semantic-interpretation authority | Semantically interpreted answer | **Runtime-transient** | `services/semantic_interpretation/service.py` |
-| **\(delta:(A_{sem},J)\to D\)** | `authority/product_architecture/assessment_semantics.yaml` | Governed assessment facts | **Runtime-transient** | `services/assessment/answer_assessment.py`, `verification_projection.py` |
-| **\(T:D\to E_{K,R}\)** | Knowledge/Responsibility/Observation authority + evidence semantics | `SessionKnowledgeElementEvidence` | **Runtime-transient** | `services/evidence_projection/*` |
-| **\(U_{local}:E_{K,R}\to\hat X\)** | `authority/product_architecture/probabilistic_learner_state.yaml` | Locally inferred learner-state candidate | **Runtime-transient** | `services/learner_state/inference.py`, `probabilistic_update.py` |
-| **\(Admission:\hat X\to Z\)** | `authority/product_architecture/learner_twin_state_admission.yaml` | Admitted state update | **Runtime until accepted** | `services/learner_state/admission.py` |
-| **\(U_{long}:(X_{prev},Z)\to X_{K,R}\)** | `authority/product_architecture/probabilistic_learner_state.yaml` | Accepted Learner Twin state/history | **Database-persistent — SQLite `learner_state_events`** | `services/learner_state/probabilistic_update.py`, `infrastructure/persistence/learner_state_store.py` |
-| **\(PD:(X_{K,R},P,A_{eligible})\to PD_{K,R}\)** | Teaching decision authority | Pedagogical decision | **Runtime-transient** | `services/pedagogical_decision/service.py` |
-| **\(EA(PD_{K,R})\)** | `authority/teaching/bounded_educational_action_policy_v1.yaml` | Learner-facing educational action | **Runtime; action trace may persist** | `services/educational_action/service.py` |
-| **Interaction provenance** | Interaction model | Turn, response, agent-action trace, evidence reference | **Database-persistent — SQLite `interaction_evidence`** | `application/interaction/evidence.py`, `infrastructure/interaction_store/sqlite.py` |
+| \(K\) Knowledge | `authority/knowledge/bounded_mathematical_elements_v1.yaml` | Admitted mathematical elements | Repository-persistent — YAML | Knowledge and evidence consumers |
+| \(R\) Responsibility | `authority/knowledge/bounded_responsibilities_v1.yaml` | Admitted mathematical responsibilities | Repository-persistent — YAML | Evidence consumers |
+| \(\Omega \subseteq K\times R\) | `authority/knowledge/bounded_responsibility_observation_v1.yaml` | Admitted observable \(K,R\) pairs | Repository-persistent — YAML | Knowledge/evidence projection |
+| Knowledge Twin content | Knowledge domain model and governed boundary | Concepts, misconceptions, questions, practice tasks, explanation patterns | Repository-persistent — `twin_substrate/knowledge/knowledge_twin.json` | `services/knowledge_access/service.py` |
+| \(P\) Teaching policy | `authority/teaching/bounded_pedagogical_decision_policy_v1.yaml` and related Teaching authority | Strategies, intervention rules, diagnostic bindings and policy parameters | Repository-persistent — authority YAML + `twin_substrate/teaching/teaching_twin.json` | `services/teaching_access/service.py` |
+| \(G\) Assessment-item generation | `authority/product_architecture/execution_dependency_model.yaml` + Assessment authority | Candidate assessment item | Runtime | `domain/assessment_item/authoring.py`, `construction.py` |
+| \(Adm_J\) Item admission | Assessment authority | Admitted assessment item | Runtime, with repository-backed bounded instances | `domain/assessment_item/admission.py` |
+| \(J=(M,A)\) Assessment item | `authority/assessment/*` | Assessment items and templates | Repository/code-backed + runtime | `domain/assessment_item/bounded_items.py`, `bounded_templates.py`, `model.py` |
+| \(A_{raw}\) Raw answer | Interaction/execution semantics | `LearnerResponse.learner_answer` | Database-persistent — SQLite `interaction_evidence`, kind=`response` | `application/interaction/*`, `infrastructure/interaction_store/sqlite.py` |
+| \(S:(J,A_{raw})\to A_{sem}\) | Semantic-interpretation authority | Semantically interpreted answer | Runtime-transient | `services/semantic_interpretation/service.py` |
+| \(delta:(A_{sem},J)\to D\) | `authority/product_architecture/assessment_semantics.yaml` | Governed assessment facts | Runtime-transient | `services/assessment/answer_assessment.py`, `verification_projection.py` |
+| \(T:D\to E_{K,R}\) | Knowledge/Responsibility/Observation authority + evidence semantics | `SessionKnowledgeElementEvidence` | Runtime-transient | `services/evidence_projection/*` |
+| \(U_{local}:E_{K,R}\to\hat X\) | `authority/product_architecture/probabilistic_learner_state.yaml` | Locally inferred learner-state candidate | Runtime-transient | `services/learner_state/inference.py`, `probabilistic_update.py` |
+| \(Admission:\hat X\to Z\) | `authority/product_architecture/learner_twin_state_admission.yaml` | Admitted state update | Runtime until accepted | `services/learner_state/admission.py` |
+| \(U_{long}:(X_{prev},Z)\to X_{K,R}\) | `authority/product_architecture/probabilistic_learner_state.yaml` | Accepted Learner Twin state/history | Database-persistent — SQLite `learner_state_events` | `services/learner_state/probabilistic_update.py`, `infrastructure/persistence/learner_state_store.py` |
+| \(PD:(X_{K,R},P,A_{eligible})\to PD_{K,R}\) | Teaching decision authority | Pedagogical decision | Runtime-transient | `services/pedagogical_decision/service.py` |
+| \(EA(PD_{K,R})\) | `authority/teaching/bounded_educational_action_policy_v1.yaml` | Learner-facing educational action | Runtime; action trace may persist | `services/educational_action/service.py` |
+| Interaction provenance | Interaction model | Turn, response, agent-action trace, evidence reference | Database-persistent — SQLite `interaction_evidence` | `application/interaction/evidence.py`, `infrastructure/interaction_store/sqlite.py` |
 
 ---
 
