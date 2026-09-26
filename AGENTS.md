@@ -1,32 +1,32 @@
-# Three Twin Docs — Repository Instructions
+# ThreeTwinDocs Agent Guidance
 
-## Purpose
+This repository publishes explanatory documentation for ThreeTwinArchitectureNext.
 
-This repository is the public, human-readable documentation layer for the Three Twin project.
+## Source of truth
 
-It is a **projection**, not an architectural authority.
+- Treat `thatao72/three-twin-architecture-next` current architecture authority as the source of truth for architecture semantics.
+- Documentation in this repository is explanatory and must not create new product or architecture authority.
+- Prefer durable conceptual responsibilities over issue-local, PR-local, implementation-local, or historical correction language.
 
-Canonical product and architecture authority remains in the designated private source repositories. Public documentation must not silently become a competing source of truth.
+## Documentation style
 
-## Content Model
+- Write for a reader who has not participated in design discussions.
+- Explain the architecture affirmatively from first principles before presenting constraints or edge cases.
+- Avoid framing durable architecture as a sequence of corrections such as “X is not Y; instead it is Z” unless the distinction is intrinsically necessary for comprehension.
+- Do not give disproportionate emphasis to a point merely because it was previously debated or corrected.
+- Separate conceptual architecture, mathematical realization, persistence, and implementation traceability so current implementation details do not define the conceptual model.
+- Preserve technically important invariants, but place implementation-specific or misconception-prevention detail after the primary explanation.
 
-- `content/` contains human-readable Markdown source for published documentation.
-- Root HTML and `assets/` form the presentation layer used by GitHub Pages.
-- Published pages should derive from `content/` rather than duplicating substantive architecture text in HTML.
+## Current documentation structure
 
-## Editing Rules
+`content/architecture.md` should proceed broadly from:
 
-1. Preserve the distinction between canonical source architecture and public explanation.
-2. Do not publish credentials, private datasets, proprietary implementation details, unpublished strategy, or other non-public material.
-3. Prefer references to canonical object names and paths over copied private source content when traceability is needed.
-4. Keep mathematical notation and architecture diagrams in Markdown using LaTeX and Mermaid where practical.
-5. Do not hand-edit generated or presentation-layer content to introduce architectural facts that are absent from the public Markdown source.
-6. When documentation is derived from a specific source revision, record that revision where practical.
+1. enduring architecture principle,
+2. Three Twin responsibilities,
+3. reasoning / evidence / persistent-state separation,
+4. learner feedback loop,
+5. mathematical observation model,
+6. canonical execution flow,
+7. persistence and implementation traceability.
 
-## Site Architecture
-
-The initial site intentionally avoids a documentation framework.
-
-`content/*.md` → browser-side Markdown rendering → Mermaid / MathJax → GitHub Pages
-
-Introduce a larger static-site framework only when navigation, versioning, search, scale, or contributor workflow justifies the added dependency.
+When ThreeTwinArchitectureNext changes materially, validate this document against current architecture authority before updating explanatory wording.
