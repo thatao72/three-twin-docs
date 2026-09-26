@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
   <title>ThreeTwinArchitectureNext</title>
   <meta name="description" content="Architecture overview for ThreeTwinArchitectureNext: persistent educational memory, AI reasoning and action, learner feedback, and runtime traceability." />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -16,26 +17,17 @@
   <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
   <style>
     :root {
-      color-scheme: light dark;
+      color-scheme: light;
       --bg: #ffffff;
       --fg: #171717;
-      --muted: #666;
-      --border: #ddd;
+      --muted: #666666;
+      --border: #d8dee4;
       --code-bg: #f6f8fa;
       --link: #0969da;
       --content-width: 1040px;
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #111;
-        --fg: #e8e8e8;
-        --muted: #aaa;
-        --border: #333;
-        --code-bg: #1b1f23;
-        --link: #58a6ff;
-      }
-    }
     * { box-sizing: border-box; }
+    html, body { background: #ffffff; }
     body {
       margin: 0;
       background: var(--bg);
@@ -85,7 +77,13 @@
     }
     .status { color: var(--muted); margin-bottom: 2rem; }
     .error { color: #b42318; white-space: pre-wrap; }
-    .mermaid { margin: 2rem 0; overflow-x: auto; }
+    .mermaid {
+      margin: 2rem 0;
+      overflow-x: auto;
+      background: #ffffff;
+      padding: 1rem;
+      border-radius: 8px;
+    }
   </style>
 </head>
 <body>
@@ -94,7 +92,18 @@
     <article id="content">Loading architecture documentation…</article>
   </main>
   <script>
-    mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' });
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: 'loose',
+      theme: 'default',
+      themeVariables: {
+        background: '#ffffff',
+        primaryTextColor: '#171717',
+        secondaryTextColor: '#171717',
+        tertiaryTextColor: '#171717',
+        lineColor: '#57606a'
+      }
+    });
 
     async function render() {
       const target = document.getElementById('content');
