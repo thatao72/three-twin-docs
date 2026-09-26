@@ -15,7 +15,13 @@ The architecture deliberately distinguishes:
 - **runtime-transient transformation state**, and
 - **database-persistent learner and interaction state**.
 
-This distinction is central to the architecture.
+A central architectural idea is that the three Twins play structurally different roles:
+
+- **Knowledge Twin** defines a relatively stable coordinate and observation space.
+- **Learner Twin** represents evolving learner-specific state in that space.
+- **Teaching Twin** provides relatively stable decision and educational-action rules.
+
+The operational feedback loop is closed by **Assessment**. Knowledge and Teaching govern that loop; they are not themselves stages circulating through it.
 
 ---
 
@@ -24,7 +30,7 @@ This distinction is central to the architecture.
 The core execution model can be summarized as:
 
 \[
-K,R,\Omega
+(K,R,\Omega,P)
 \rightarrow J
 \rightarrow A_{raw}
 \rightarrow A_{sem}
@@ -66,7 +72,8 @@ S:(J,A_{raw})\rightarrow A_{sem}
 \]
 
 \[
-T:D\rightarrow E_{K,R}
+T:(D,\text{governed criterion }(K,R)\text{ binding},\Omega)
+\rightarrow E_{K,R}
 \]
 
 \[
@@ -85,45 +92,76 @@ U_{long}:(X_{prev},Z)\rightarrow X_{K,R}
 PD:(X_{K,R},P,A_{eligible})\rightarrow PD_{K,R}
 \]
 
+An important boundary is that downstream processing does not freely reinterpret Knowledge.
+
+Assessment-relevant mathematical and observation semantics are carried or resolvable through the admitted assessment item \(J\). In particular, the governed criterion \((K,R)\) bindings used for evidence attribution are internal to the assessment facet of \(J\).
+
 ---
 
-## 2. Mathematical Execution Graph
+## 2. Three Twin Control Architecture
+
+At the highest level, ThreeTwinArchitectureNext is best understood as an **assessment-driven feedback system**.
+
+Knowledge and Teaching provide relatively stable governing structures. The Learner Twin is the evolving state.
 
 ```mermaid
-flowchart TD
+flowchart TB
 
-    K["K<br/>Knowledge Elements"]
-    R["R<br/>Responsibilities"]
-    O["Ω ⊂ K × R<br/>Admitted Observation Relation"]
-    P["P<br/>Teaching Policy"]
+    subgraph GOVERNANCE["STABLE GOVERNING STRUCTURE"]
+        direction LR
 
-    K --> O
-    R --> O
+        K["KNOWLEDGE TWIN<br/><b>K, R, Ω</b><br/><br/>Stable coordinate and<br/>observation space"]
 
-    O --> TARGET["Target (K,R)*"]
-    P --> TARGET
+        J0["ASSESSMENT ITEM<br/><b>J = (M,A)</b><br/><br/>Learner-independent<br/>observation contract"]
 
-    TARGET -->|"G"| JC["J candidate"]
-    JC -->|"Adm_J"| J["J = (M,A)<br/>Assessment Item"]
+        TWIN_T["TEACHING TWIN<br/><b>P</b><br/><br/>Stable decision and<br/>educational-action rules"]
 
-    J --> AR["A_raw<br/>Raw Learner Answer"]
-    AR -->|"S"| AS["A_sem<br/>Semantic Answer"]
-    AS -->|"δ"| D["D<br/>Assessment Facts"]
-    D -->|"T"| E["E_(K,R)<br/>Attributed Evidence"]
-    E -->|"U_local"| XH["X_hat<br/>Candidate Learner State"]
-    XH -->|"Admission"| Z["Z<br/>Admitted State Update"]
-    Z -->|"U_long(X_prev,Z)"| X["X_(K,R)<br/>Learner Twin State"]
+        K -->|"defines mathematical and<br/>observation semantics"| J0
+        TWIN_T -->|"supplies applicable<br/>teaching policy"| J0
+    end
 
-    X --> PD["PD_(K,R)<br/>Pedagogical Decision"]
-    P --> PD
+    subgraph LOOP["LEARNER-SPECIFIC ASSESSMENT LOOP"]
+        direction LR
 
-    PD --> EA["Educational Action"]
-    EA --> J
+        J["Assessment<br/><b>J(t)</b>"]
+
+        A["Learner<br/>Response"]
+
+        E["Assessment<br/>& Evidence"]
+
+        L["LEARNER TWIN<br/><b>X(K,R)</b><br/><br/>Evolving state"]
+
+        PD["Pedagogical<br/>Decision"]
+
+        EA["Educational<br/>Action"]
+
+        J --> A
+        A --> E
+        E --> L
+        L --> PD
+        PD --> EA
+        EA -->|"next assessment"| J
+    end
+
+    J0 --> J
+    J0 -->|"governs interpretation,<br/>assessment and attribution"| E
+
+    TWIN_T -->|"P"| PD
 ```
 
-This forms a closed learning loop:
+The central relationship is therefore not:
 
-**Knowledge → Observation → Assessment → Evidence → Learner State → Pedagogical Decision → Educational Action → Next Assessment**
+**Knowledge → Learner → Teaching → Knowledge**
+
+Instead:
+
+- Knowledge defines the coordinate and observation space.
+- Assessment observes learner performance in that governed space.
+- Evidence updates the Learner Twin.
+- Teaching policy maps learner state to pedagogical decisions and educational actions.
+- The resulting action leads to the next Assessment.
+
+The **Assessment loop**, rather than the three Twins themselves, is what closes.
 
 ---
 
@@ -152,93 +190,66 @@ This forms a closed learning loop:
 
 ---
 
-## 4. Authority, Instance and Persistence Architecture
+## 4. Canonical Execution and Persistence
 
-The architecture uses three materially different instance lifecycles.
+The high-level control architecture can be expanded into the actual governed execution path.
+
+The important dependency rule is that Knowledge is not freely re-read downstream.
+
+\(K,R,\Omega\) participate in assessment construction and admission. Their assessment-relevant semantics are then carried by \(J\), including the governed criterion \((K,R)\) bindings used for evidence attribution.
 
 ```mermaid
-flowchart TB
+flowchart LR
 
-    subgraph REPO["Repository-Persistent"]
-        direction LR
+    K["Knowledge Authority<br/><b>K, R, Ω</b>"]
+    P["Teaching Authority<br/><b>P</b>"]
 
-        subgraph FORMAL["Formal Authority"]
-            K["K"]
-            R["R"]
-            O["Ω"]
-            P["P"]
-            AA["Assessment Authority"]
-        end
+    J["Assessment Item<br/><b>J = (M,A)</b>"]
 
-        subgraph KT["Knowledge Twin Content"]
-            KJSON["knowledge_twin.json<br/><br/>concepts<br/>misconceptions<br/>questions<br/>practice tasks<br/>explanation patterns"]
-        end
+    AR["A_raw"]
+    AS["A_sem"]
+    D["D"]
+    E["E(K,R)"]
+    XH["X_hat"]
+    Z["Z"]
+    X["X(K,R)"]
+    PD["PD(K,R)"]
+    EA["Educational Action"]
 
-        subgraph TT["Teaching Twin Content"]
-            TJSON["teaching_twin.json<br/><br/>strategies<br/>intervention rules<br/>diagnostic bindings"]
-        end
-
-        JREPO["Bounded Assessment<br/>Items / Templates"]
-    end
-
-    subgraph RUNTIME["Runtime-Transient"]
-        J["J"]
-        AS["A_sem"]
-        D["D"]
-        E["E_(K,R)<br/>explicitly non-persistent"]
-        XH["X_hat"]
-        Z["Z<br/>before persistence"]
-        PD["PD_(K,R)"]
-        EA["Educational Action"]
-    end
-
-    subgraph INTERACTION["Interaction Persistence — SQLite"]
-        AR["A_raw / LearnerResponse"]
-        TURN["Interaction Turn"]
-        TRACE["Agent Action Trace"]
-        EREF["Evidence Reference"]
-    end
-
-    subgraph LEARNER["Learner-State Persistence — SQLite"]
-        X["X_(K,R)<br/>accepted state/history"]
-        EVENTS["learner_state_events<br/>append-only"]
-    end
-
-    K --> J
-    R --> J
-    O --> J
-    P --> J
-    AA --> J
-    JREPO --> J
-
-    KJSON --> J
-    TJSON --> J
+    K -->|"authoring / admission"| J
+    P -->|"applicable policy"| J
 
     J --> AR
-    AR --> AS
-    AS --> D
-    D --> E
-    E --> XH
-    XH --> Z
-    Z --> X
-    X --> EVENTS
+
+    AR -->|"S"| AS
+    J -->|"interpretation context"| AS
+
+    AS -->|"δ"| D
+    J -->|"criteria"| D
+
+    D -->|"T"| E
+    J -->|"governed (K,R)<br/>criterion binding"| E
+
+    E -->|"U_local"| XH
+    XH -->|"Admission"| Z
+    Z -->|"U_long(X_previous,Z)"| X
 
     X --> PD
-    P --> PD
-    TJSON --> PD
+    P -->|"P"| PD
 
     PD --> EA
-    EA --> J
-
-    AR --> EREF
-    EA --> TRACE
+    EA -->|"next J"| J
 ```
 
----
+There is intentionally:
 
-## 5. Persistence Boundary
+- no direct \(K\rightarrow X\) dependency,
+- no direct \(K\rightarrow PD\) dependency,
+- no direct \(K\rightarrow EA\) dependency.
 
-The execution path crosses persistence boundaries at deliberately different points.
+Likewise, Educational Action does not reselect the learner-specific target. Pedagogical Decision is the learner-specific selector; Educational Action realizes that decision.
+
+### Persistence boundaries
 
 ```mermaid
 flowchart LR
@@ -249,7 +260,7 @@ flowchart LR
 
     AR --> AS["A_sem"]
     AS --> D["D"]
-    D --> E["E_(K,R)"]
+    D --> E["E_(K,R)<br/>non-persistent"]
     E --> XH["X_hat"]
     XH --> Z["Z"]
 
@@ -260,9 +271,10 @@ flowchart LR
     PD --> EA["Educational Action"]
 
     EA -. "trace" .-> IDB
+    EA -->|"next assessment"| J
 ```
 
-The central distinction is:
+The central persistence distinction is:
 
 | Category | Examples | Persistence |
 |---|---|---|
@@ -277,101 +289,185 @@ Persistence therefore occurs on either side of the evidence-transformation pipel
 
 ---
 
-## 6. Three Twin Materialization
+## 5. Instance and Persistence Architecture
 
-The three Twins deliberately have different materialization models.
-
-```mermaid
-flowchart LR
-
-    subgraph K["Knowledge Twin"]
-        KA["Formal Knowledge Authority<br/>K, R, Ω"]
-        KD["knowledge_twin.json"]
-        KA --> KD
-    end
-
-    subgraph L["Learner Twin"]
-        LE["Evidence E_(K,R)"]
-        LS["Persistent X_(K,R)"]
-        LH["Append-only Learner<br/>State History"]
-        LE --> LS --> LH
-    end
-
-    subgraph T["Teaching Twin"]
-        TA["Formal Teaching Authority<br/>P"]
-        TD["teaching_twin.json"]
-        TA --> TD
-    end
-
-    K --> L
-    L --> T
-    T --> K
-```
-
-### Knowledge Twin
-
-Primarily **version-controlled reference knowledge**:
-
-- formal mathematical elements,
-- mathematical responsibilities,
-- admissible observation relations,
-- concepts,
-- misconceptions,
-- questions,
-- practice tasks,
-- explanation patterns.
-
-Its primary materialization is repository-backed YAML and JSON.
-
-### Learner Twin
-
-Primarily **learner-specific evolving state**.
-
-Evidence is transformed transiently through:
-
-\[
-D\rightarrow E_{K,R}\rightarrow\hat X\rightarrow Z
-\]
-
-before accepted state changes are persisted as \(X_{K,R}\).
-
-Its durable materialization is database-backed and historical.
-
-### Teaching Twin
-
-Primarily **version-controlled pedagogical policy and strategy**:
-
-- decision policies,
-- teaching strategies,
-- intervention rules,
-- diagnostic bindings,
-- educational-action policy.
-
-Its primary materialization is repository-backed YAML and JSON.
-
----
-
-## 7. Four Architectural Layers
-
-The complete architecture can therefore be viewed as four traceable layers:
+The same architecture can be viewed from the perspective of materialization.
 
 ```mermaid
 flowchart TB
 
-    M["1. Mathematical Model<br/><br/>K, R, Ω, P, J, S, δ, T,<br/>U_local, Admission, U_long, PD"]
+    subgraph REPO["REPOSITORY-PERSISTENT GOVERNED STRUCTURE"]
+        direction LR
 
-    A["2. Governed Authority<br/><br/>authority/knowledge<br/>authority/assessment<br/>authority/teaching<br/>authority/product_architecture"]
+        KA["Knowledge Authority<br/><b>K · R · Ω</b>"]
 
-    I["3. Instance & Persistence<br/><br/>Repository YAML / JSON<br/>Runtime objects<br/>Interaction SQLite<br/>Learner-State SQLite"]
+        KC["Knowledge Twin Content<br/><br/>concepts<br/>misconceptions<br/>questions<br/>practice tasks<br/>explanation patterns"]
 
-    C["4. Executable Implementation<br/><br/>domain/*<br/>services/*<br/>application/*<br/>infrastructure/*"]
+        AA["Assessment Items<br/>and Templates"]
+
+        TP["Teaching Authority<br/><b>P</b>"]
+
+        TC["Teaching Twin Content<br/><br/>strategies<br/>intervention rules<br/>diagnostic bindings"]
+    end
+
+    subgraph RUNTIME["ASSESSMENT / STATE-TRANSITION RUNTIME"]
+        direction LR
+
+        J["J"]
+        AS["A_sem"]
+        D["D"]
+        E["E(K,R)<br/>non-persistent"]
+        XH["X_hat"]
+        Z["Z"]
+        PD["PD(K,R)"]
+        EA["Educational Action"]
+
+        J --> AS
+        AS --> D
+        D --> E
+        E --> XH
+        XH --> Z
+        PD --> EA
+        EA -->|"next J"| J
+    end
+
+    subgraph INTERACTION["INTERACTION SQLITE"]
+        AR["A_raw / response"]
+        TRACE["turns · action traces<br/>evidence references"]
+    end
+
+    subgraph LEARNER["LEARNER TWIN — SQLITE"]
+        X["X(K,R)<br/>Accepted Learner State"]
+        EVENTS["learner_state_events<br/>append-only history"]
+
+        X --> EVENTS
+    end
+
+    KA -->|"construct / admit"| J
+    AA --> J
+    TP -->|"assessment policy"| J
+
+    AR --> AS
+    AR --> TRACE
+
+    Z -->|"accepted update"| X
+    X --> PD
+
+    TP -->|"P"| PD
+    TC --> PD
+```
+
+This representation separates:
+
+1. **governed reference structures**,
+2. **runtime transformations**,
+3. **interaction persistence**, and
+4. **persistent learner state**.
+
+---
+
+## 6. Three Twin Roles
+
+The three Twins are intentionally asymmetric.
+
+```mermaid
+flowchart TB
+
+    K["KNOWLEDGE TWIN<br/><br/><b>Stable Coordinate Space</b><br/>K · R · Ω"]
+
+    T["TEACHING TWIN<br/><br/><b>Stable Decision Rules</b><br/>P"]
+
+    subgraph LOOP["ASSESSMENT-DRIVEN LEARNER-STATE LOOP"]
+        direction LR
+
+        J["Assessment<br/>J(t)"]
+
+        OBS["Observation /<br/>Evidence"]
+
+        L["LEARNER TWIN<br/><b>X(t)</b><br/><br/>State on K × R"]
+
+        DEC["Pedagogical<br/>Decision"]
+
+        EA["Educational<br/>Action"]
+
+        J --> OBS
+        OBS --> L
+        L --> DEC
+        DEC --> EA
+        EA -->|"next assessment"| J
+    end
+
+    K -->|"defines the observation<br/>contract embodied in J"| J
+
+    T -->|"governs assessment<br/>construction"| J
+
+    T -->|"governs state → decision"| DEC
+```
+
+### Knowledge Twin
+
+The Knowledge Twin defines the relatively stable space in which learner state and evidence have meaning:
+
+- mathematical elements \(K\),
+- mathematical responsibilities \(R\),
+- admissible observation relation \(\Omega\),
+- governed knowledge content.
+
+Its semantics enter learner-specific execution primarily through the admitted assessment item \(J\), rather than through arbitrary downstream re-reading of Knowledge.
+
+### Learner Twin
+
+The Learner Twin is the evolving state:
+
+\[
+X_t \in \mathcal X(K\times R)
+\]
+
+Evidence generated by Assessment updates that state:
+
+\[
+X_{t+1}=U(X_t,E_t)
+\]
+
+Intermediate evidence and inference objects remain transient until an update is admitted into persistent learner state.
+
+### Teaching Twin
+
+The Teaching Twin provides relatively stable decision and educational-action rules.
+
+The pedagogical decision is governed by:
+
+\[
+PD_t = PD(X_t,P,A_{eligible})
+\]
+
+It therefore consumes the already pair-indexed learner state rather than directly re-reading Knowledge.
+
+Educational Action realizes the selected target; it does not independently reselect it.
+
+---
+
+## 7. Architectural Layers
+
+The complete system can be viewed as four traceable architectural layers.
+
+```mermaid
+flowchart TB
+
+    M["1. MATHEMATICAL MODEL<br/><br/>K, R, Ω, P, J, S, δ, T,<br/>U_local, Admission, U_long, PD"]
+
+    A["2. GOVERNED AUTHORITY<br/><br/>Knowledge · Assessment · Teaching<br/>Product Architecture"]
+
+    I["3. INSTANCE & PERSISTENCE<br/><br/>Repository YAML / JSON<br/>Runtime transformations<br/>Interaction SQLite<br/>Learner-State SQLite"]
+
+    C["4. EXECUTABLE IMPLEMENTATION<br/><br/>domain/* · services/*<br/>application/* · infrastructure/*"]
 
     M --> A
     A --> I
     I --> C
 ```
 
-The intended traceability relation is therefore:
+The intended traceability relation is:
 
 \[
 \boxed{
@@ -387,40 +483,65 @@ The intended traceability relation is therefore:
 }
 \]
 
+This vertical traceability is distinct from the horizontal operational feedback loop.
+
 ---
 
 ## 8. Architectural Summary
 
-ThreeTwinArchitectureNext is not simply a system containing three databases called Knowledge, Learner, and Teaching.
+ThreeTwinArchitectureNext is not a cycle in which Knowledge, Learner, and Teaching continually transform into one another.
 
-It is a governed closed-loop decision architecture:
+Its structure is more precise:
 
 \[
 \boxed{
-\text{Model Knowledge}
-\rightarrow
-\text{Design Observation}
-\rightarrow
-\text{Interpret Evidence}
-\rightarrow
-\text{Infer Learner State}
-\rightarrow
-\text{Choose Educational Action}
-\rightarrow
-\text{Observe Again}
+\begin{array}{c}
+\text{Knowledge Twin}\\
+\text{stable coordinate / observation space}
+\end{array}
+}
+\qquad
+\boxed{
+\begin{array}{c}
+\text{Learner Twin}\\
+\text{evolving state on that space}
+\end{array}
+}
+\qquad
+\boxed{
+\begin{array}{c}
+\text{Teaching Twin}\\
+\text{stable decision rules}
+\end{array}
 }
 \]
 
-The three Twins play structurally different roles:
+Assessment provides the feedback mechanism that connects them operationally.
 
-- **Knowledge Twin** provides governed reference knowledge.
-- **Learner Twin** represents evolving learner-specific belief/state.
-- **Teaching Twin** provides governed decision policy and pedagogical strategy.
+The execution principle can be summarized as:
 
-The transformation pipeline between them is intentionally explicit.
+\[
+\boxed{
+\text{Governed Assessment}
+\rightarrow
+\text{Evidence}
+\rightarrow
+\text{Learner-State Update}
+\rightarrow
+\text{Pedagogical Decision}
+\rightarrow
+\text{Educational Action}
+\rightarrow
+\text{Next Assessment}
+}
+\]
 
-A learner response is preserved as interaction evidence, transformed through governed but largely non-persistent intermediate representations, and only an admitted learner-state update crosses into durable Learner Twin state.
+Knowledge governs the coordinate and observation semantics embodied in the admitted assessment contract \(J\).
 
-This creates a traceable separation between:
+Teaching policy governs assessment construction and the mapping from learner state to pedagogical decision.
 
-**what the system knows, what it observes, what it infers, what it persists, and what it decides.**
+The Learner Twin is the principal evolving state.
+
+This yields a deliberate separation between:
+
+**what defines the space, what is observed, what is inferred, what is persisted, what decides, and what closes the feedback loop.**
