@@ -4,23 +4,16 @@
 
 ThreeTwinArchitectureNext separates **persistent educational memory** from **active reasoning and action**.
 
-The Three Twins retain structured educational knowledge and state over time. AI agents and deterministic Product Capabilities interpret learner input, reason over Twin context, use models and tools, make pedagogical decisions, realize educational actions, and propose state changes.
+The Three Twins retain governed educational knowledge and state over time. Active reasoning components interpret learner interaction, make pedagogical decisions, realize educational actions, assess responses, and propose state transitions. Persistence changes only through explicit governed boundaries.
 
-The enduring rule is simple:
+The enduring division is:
 
-- **Twins persist structured educational memory.**
-- **The reasoning and action layer operates over that memory and the current interaction.**
-- **Persistent changes occur only through explicit governed transitions.**
-
-A model output, diagnosis, assessment result, recommendation, or generated item does not become persistent truth merely because it was produced. Semantic authority, validation, admission, and persistence remain explicit boundaries.
-
-The three Twins are:
-
-- **Knowledge Twin** — persistent memory of the educational world.
+- **Knowledge Twin** — learner-independent domain knowledge and mathematical truth.
 - **Learner Twin** — persistent estimated state of an individual learner.
-- **Teaching Twin** — persistent pedagogical memory about how learning is assessed and guided.
+- **Teaching Twin** — reusable pedagogical, observation, evidence, and policy semantics.
+- **Reasoning and action layer** — learner-specific decision-making, interpretation, assessment, realization, and state-transition logic operating over the Twins.
 
-Foundation models, algorithms, storage technologies, agent frameworks, and service boundaries are replaceable implementation choices. The architecture is defined primarily by semantic responsibility and information flow.
+A generated answer, diagnosis, assessment result, recommendation, or state proposal does not become persistent truth merely because a model or algorithm produced it. Semantic authority, admission, and persistence remain explicit.
 
 ---
 
@@ -28,128 +21,92 @@ Foundation models, algorithms, storage technologies, agent frameworks, and servi
 
 ### Knowledge Twin
 
-The Knowledge Twin represents the learning domain independently of any learner.
+The Knowledge Twin owns learner-independent domain semantics and mathematical truth.
 
-It may contain:
+Let \(K\) denote governed Knowledge. Knowledge may include primitive elements and explicitly admitted composed elements. Relations between Knowledge elements do not automatically create new composed coordinates, and graph structure does not imply propagation of learner state.
 
-- mathematical concepts and stable Knowledge identities,
-- prerequisite and other conceptual relationships,
-- mathematical problems and task families,
-- solution structures and valid transformations,
-- equivalence relations and domain conditions,
-- misconception and error structures,
-- educational resources and explanation patterns, and
-- accumulated evidence about the domain and resources.
-
-For the mathematical model below, let \(K\) denote the learner-independent Knowledge space. The Knowledge Twin owns \(K\) and mathematical truth.
-
-A Knowledge element may be primitive or explicitly composed. Composition is itself governed: the existence of relations between Knowledge elements does not automatically create every possible composed coordinate, nor does a graph relation imply learner-state propagation.
+The Knowledge Twin also owns the semantic vocabulary of **Responsibilities** \(R\): stable, learner-independent, problem-independent observable performances over Knowledge, such as executing a procedure or applying knowledge in context. \(R\) is separately governed; it is not computed mechanically from \(K\).
 
 ### Learner Twin
 
-The Learner Twin stores the system's accepted estimate of an individual learner.
+The Learner Twin stores the accepted estimate of an individual learner.
 
-Learner state is not raw interaction history and is not objective truth. It is a governed estimate derived from evidence over time.
+The canonical learner-state address is an admitted exact Knowledge–Responsibility pair. Persistent state therefore distinguishes different observable performances over the same Knowledge.
 
-The canonical learner-state address is an exact pair
-
-\[
-(K,R),
-\]
-
-where \(R\) describes the observable performance being demonstrated over Knowledge \(K\). Keeping the pair intact allows different kinds of performance over the same mathematical Knowledge to remain distinguishable.
-
-A Knowledge-only mastery summary may be derived for presentation under an explicit aggregation policy, but it is not the canonical state and is not a substitute for pair-indexed state.
+A Knowledge-only summary may be derived for presentation under an explicit aggregation policy, but it is not the canonical learner state and is not a Pedagogical Decision input.
 
 ### Teaching Twin
 
-The Teaching Twin stores reusable pedagogical memory.
+The Teaching Twin stores reusable pedagogical semantics and policy.
 
-It may contain:
+Let \(P\) denote reusable Teaching policy. Teaching semantics include assessment policy, evidence policy, ambiguity and error-tolerance policy, intervention intent, observation semantics, and other governed instructional policy.
 
-- assessment and intervention strategies,
-- instructional alternatives,
-- diagnostic and evidence policies,
-- review policies,
-- follow-through and award rules,
-- ambiguity and error-tolerance rules,
-- probe-design policy, and
-- educational research or accumulated evidence about what tends to work.
-
-Let \(P\) denote governed reusable Teaching policy.
-
-The Teaching Twin stores policy and pedagogical knowledge. Learner-specific diagnosis, planning, selection, and action realization occur in the active reasoning and action layer.
+Learner-specific selection is not persistent Teaching memory. It occurs in the active control layer.
 
 ---
 
-## 3. Two Semantic Structures
+## 3. Semantic Spaces
 
-The architecture separates **what performance is about** from **how an educational interaction observes and interprets it**.
+The architecture uses two principal semantic structures.
 
-### Knowledge–Responsibility space
+### 3.1 Knowledge–Responsibility domain
 
-Let
-
-\[
-Z_{KR}=K\times R,
-\]
-
-where:
-
-- \(K\) is the Knowledge space,
-- \(R\) is the space of stable, learner-independent, problem-independent observable Responsibilities.
-
-Not every formal pair must be meaningful. The governed observation relation is
+The ambient product is
 
 \[
-\Omega\subseteq K\times R.
+K\times R.
 \]
 
-\(\Omega\) identifies the admitted Knowledge–Responsibility pairs that the system is prepared to treat as observable semantic coordinates.
-
-This space is used for exact learner evidence and persistent learner state.
+The canonical semantic domain is the **admitted subset**
 
 \[
-E_t\in Z_{KR}, \qquad X_t: Z_{KR}\rightarrow \text{learner-state estimates}.
+Z_{KR}\subseteq K\times R.
 \]
 
-Knowledge owns \(K\) and mathematical truth. Responsibility semantics are governed observable-performance semantics. Their product \(Z_{KR}\) is therefore a neutral cross-Twin semantic address space rather than an object owned wholly by one Twin.
+Membership in \(Z_{KR}\) means that the exact \((K,R)\) pair is governed and admitted as an observable semantic coordinate. Bounded registries and exact pair records in the implementation materialize or prove membership in \(Z_{KR}\); they do not define a second canonical mathematical object.
 
-### Teaching-side measurement semantics
-
-The Teaching side conceptually contains reusable observation/evidence semantics and pedagogical policy semantics. We denote this conceptual structure by
+Two important fields live over this domain:
 
 \[
-Z_T.
+E_t: Z_{KR}\rightarrow \mathcal E,
 \]
 
-\(Z_T\) is deliberately conceptual: the architecture does not require one complete global Observation × Policy ontology.
+\[
+X_t: Z_{KR}\rightarrow \mathcal X.
+\]
 
-Concrete assessments materialize the Teaching semantics they need inside their assessment facet. Criterion structures are therefore local materializations within an assessment, not a second canonical global coordinate system.
+Here \(E_t\) is learner evidence and \(X_t\) is persistent learner state.
 
-The two structures meet through governed assessment bindings rather than by collapsing into one ontology.
+### 3.2 Teaching semantic space
+
+Let \(Z_T\) denote the conceptual Teaching-side semantic space containing reusable observation/evidence semantics and reusable Teaching policy \(P\).
+
+\(P\) is an explicit constituent of \(Z_T\), but the architecture does not freeze one universal ontology such as Observation × Policy. Different educational modalities may materialize different governed structures within this conceptual space.
+
+The architecture therefore keeps Knowledge–Responsibility semantics and Teaching semantics separate while allowing governed relations between them.
 
 ```mermaid
 flowchart LR
     K["Knowledge K"]
     R["Responsibility R"]
-    KR["Z_KR = K × R"]
-    T["Conceptual Teaching semantics Z_T"]
-    J["Assessment template J = (M, A)"]
+    A["Ambient K × R"]
+    ZKR["Admitted domain Z_KR"]
+    ZT["Conceptual Teaching semantics Z_T"]
+    P["Reusable Teaching policy P"]
 
-    K --> KR
-    R --> KR
-    KR --> J
-    T --> J
+    K --> A
+    R --> A
+    A --> ZKR
+    P --> ZT
 ```
 
 ---
 
-## 4. The Assessment Model
+## 4. Reusable Assessment Architecture
 
 Assessment is one Educational Action modality with a formal measurement path.
 
-### Reusable assessment template
+### 4.1 Reusable admitted assessment template
 
 A reusable admitted assessment resource is
 
@@ -159,75 +116,74 @@ J=(M,A),
 
 where:
 
-- \(M\) is the Knowledge-owned mathematical or task-family facet,
-- \(A\) is the fixed assessment facet containing problem-specific Teaching/measurement semantics.
+- \(M\) is the Knowledge-side mathematical family and its governed demand over \(Z_{KR}\),
+- \(A\) is the fixed assessment facet carrying Teaching-side measurement semantics, policy, provenance, and governed bindings.
 
-\(J\) is learner-independent and reusable. It is a template family rather than a learner-facing concrete item.
-
-The assessment facet contains a governed template-level binding
-
-\[
-B_J,
-\]
-
-which connects the assessment's observation semantics to exact coordinates in \(Z_{KR}\). In the bounded implementation this relation is resolved through criterion-addressed diagnostic bindings. Coverage fields such as target \(K\times R\) pairs are derived views of this governed binding, not a competing source of truth.
-
-The admitted template is created through an explicit admission boundary:
+\(J\) is learner-independent and reusable. It is admitted through
 
 \[
 Adm_J(J_{candidate})=J.
 \]
 
-Admission establishes that the reusable family is semantically coherent and versioned before it can participate in runtime realization.
+Template admission validates authority and version integrity, realization parameter domains, family invariants, exact admitted \(Z_{KR}\) claims, assessment capability consistency, provenance, and the requirement that concrete realization still pass \(Adm_M\).
 
-### Concrete realization
+### 4.2 Fixed cross-space binding
 
-The mathematical facet of an admitted template may expose governed realization parameters \(\rho\). A concrete mathematical instance is produced by
-
-\[
-\widetilde M_{candidate}=Inst_M(J,\rho).
-\]
-
-This instantiation is learner-independent and target-preserving. It may not inspect learner state, learner identity, previous answers, or Educational Action history, and it may not change \(A\), \(B_J\), or the selected semantic target.
-
-The concrete mathematical instance then passes a separate post-instantiation admission boundary:
+Each admitted assessment template fixes a governed relation
 
 \[
-\widetilde M=Adm_M(\widetilde M_{candidate},J).
+B_J\subseteq Z_T\times Z_{KR}.
 \]
 
-Only then does the learner-facing assessment item exist:
+\(B_J\) links Teaching-side observation semantics to exact Knowledge–Responsibility coordinates. It is fixed before the learner response and remains invariant across realizations of the same admitted template.
+
+In the current bounded implementation, criterion-addressed diagnostic bindings are the concrete authority that resolves \(B_J\).
+
+### 4.3 Concrete learner-facing item
+
+An admitted template exposes governed realization parameters \(\rho\). The mathematical family is instantiated by
+
+\[
+Inst_M(J,\rho)\rightarrow \widetilde M_{candidate}.
+\]
+
+`Inst_M` instantiates only the mathematical facet. It does not change \(A\), \(B_J\), the semantic target, or learner-specific intent.
+
+The candidate then passes a separate admission boundary:
+
+\[
+Adm_M(\widetilde M_{candidate},J)\rightarrow \widetilde M.
+\]
+
+Only after successful \(Adm_M\) is the learner-facing item materialized:
 
 \[
 \widetilde J=(\widetilde M,A).
 \]
 
-Thus the reusable family and concrete item have different lifecycle boundaries:
+The materialization step is representational; it introduces no second admission decision.
 
 ```mermaid
 flowchart LR
     JC["J_candidate"]
     AJ["Adm_J"]
-    J["Admitted reusable J = (M, A)"]
-    RHO["Allowed rho"]
+    J["Admitted J = (M,A)"]
+    RHO["Allowed ρ"]
     IM["Inst_M"]
     MC["M~ candidate"]
     AM["Adm_M"]
-    MT["Admitted M~"]
-    JT["Learner-facing J~ = (M~, A)"]
+    JT["Learner-facing J~ = (M~,A)"]
 
     JC --> AJ --> J
     J --> IM
     RHO --> IM
-    IM --> MC --> AM --> MT --> JT
+    IM --> MC --> AM --> JT
     J -->|"fixed A and B_J"| JT
 ```
 
-The key invariant is that \(A\) and \(B_J\) are fixed at template admission and remain unchanged across concrete realizations.
-
 ---
 
-## 5. From Learner State to Educational Action
+## 5. Learner-Specific Control
 
 The generic adaptive control path is
 
@@ -235,81 +191,42 @@ The generic adaptive control path is
 X_t\rightarrow PD\rightarrow Q_t\rightarrow EA\rightarrow EducationalActionItem_t.
 \]
 
-### Pedagogical Decision
+### 5.1 Pedagogical Decision
 
-Pedagogical Decision, \(PD\), is the sole learner-specific selector.
+Pedagogical Decision \(PD\) is the sole learner-specific selector. It reads governed learner state and policy context and determines what educational need should be acted on next.
 
-It reasons over persistent learner state, Teaching policy, eligible action classes, and other governed context to determine what educational need should be acted on next.
-
-Its output is represented by the transient requirement
+Its semantic output is the transient requirement
 
 \[
 Q_t=(M_t^*,A_t^*).
 \]
 
-Here:
+- \(M_t^*\) is the Knowledge–Responsibility-side requirement over \(Z_{KR}\).
+- \(A_t^*\) is the Teaching-side requirement over \(Z_T\), including pedagogical intent, modality, and realization constraints.
+- cross-part constraints and decision provenance may relate the two sides.
 
-- \(M_t^*\) is the Knowledge–Responsibility-side requirement, such as exact \(K\times R\) coordinates or governed coverage requirements;
-- \(A_t^*\) is the Teaching-side requirement, such as pedagogical intent, modality, and realization constraints.
+The bounded runtime represents this structure as an explicit `EducationalActionRequirement` containing an exact target, pedagogical intent, admissible modality set, hard constraints, decision provenance, and optional realization guidance.
 
-\(Q_t\) may also carry decision provenance and constraints that are not local to one coordinate.
+### 5.2 Educational Action realization
 
-Its minimum contract therefore includes:
+Educational Action \(EA\) consumes \(Q_t\) and learner-independent resource signatures. It does not re-read learner state to select a different target.
 
-- semantic target or governed coverage,
-- pedagogical intent,
-- modality constraint,
-- hard realization constraints,
-- decision provenance,
-- optional soft realization guidance.
+Its conceptual stages are:
 
-\(Q_t\) is transient. It is the semantic handoff between learner-specific decision-making and learner-independent resource realization.
+1. hard eligibility,
+2. governed soft fit among eligible resources,
+3. permitted realization,
+4. modality-specific admission.
 
-### Educational Action realization
+If hard requirements cannot be satisfied, realization fails closed rather than silently weakening \(Q_t\).
 
-Educational Action, \(EA\), consumes \(Q_t\) and governed reusable resource signatures.
-
-It does not re-read \(X_t\) to choose a different target. The learner-specific choice has already been made by \(PD\).
-
-Its generic stages are:
-
-1. **hard eligibility** — every mandatory requirement in \(Q_t\) must be satisfied;
-2. **soft fit** — eligible resources may be compared using governed modality-specific preferences;
-3. **realization** — permitted parameters are bound without changing target, intent, or modality;
-4. **modality-specific admission** — additional admission is applied where that modality requires it.
-
-If no resource satisfies all hard requirements, realization fails closed rather than silently relaxing the request.
-
-```mermaid
-flowchart LR
-    X["Persistent learner state X_t"]
-    PD["Pedagogical Decision"]
-    Q["Requirement Q_t = (M*, A*)"]
-    EA["Educational Action realization"]
-    I["EducationalActionItem_t"]
-
-    X --> PD --> Q --> EA --> I
-```
-
-Assessment is one branch of this generic action model. Explanation, hint, worked example, guided practice, and other modalities may use different resource and admission structures and do not inherit assessment-specific \(B_J\) semantics.
+The generic EA architecture is intentionally broader than the currently validated runtime. The fixed-template assessment branch is validated; generalized non-assessment realization remains a target architecture.
 
 ---
 
 ## 6. Assessment as an Educational Action
 
-When \(Q_t\) calls for an assessment, EA selects from learner-independent admitted assessment resources whose signatures describe what they can realize.
-
-A resource signature may expose properties such as:
-
-- realizable exact \(K\times R\) coverage,
-- supported pedagogical intents,
-- modality and response form,
-- policy compatibility,
-- permitted realization parameters,
-- calibrated or intrinsic challenge information,
-- provenance and admission metadata.
-
-The assessment branch is therefore:
+For the assessment modality, the bounded canonical runtime closes the realization path as
 
 \[
 Q_t
@@ -320,92 +237,90 @@ Q_t
 \rightarrow \widetilde J_t.
 \]
 
+EA performs assessment-resource eligibility and fit over admitted learner-independent \(J\) resources, binds permitted \(\rho\), and orchestrates the canonical realization boundaries. It does not absorb the authority of \(Adm_J\), \(Inst_M\), or \(Adm_M\).
+
 ```mermaid
 flowchart LR
     Q["Q_t"]
     EA["EA assessment branch"]
-    J["Admitted reusable J = (M,A)"]
+    J["Admitted J"]
     IM["Inst_M"]
     AM["Adm_M"]
-    JT["Learner-facing J~_t"]
+    JT["J~_t"]
 
     Q --> EA --> J --> IM --> AM --> JT
 ```
 
-The assessment family \(J\) is admitted before realization. Each mathematical realization is separately admitted by \(Adm_M\). EA may orchestrate these steps, but it does not absorb or redefine their admission authority.
-
 ---
 
-## 7. From Learner Response to Evidence
+## 7. Response, Observation, and Evidence
 
-A learner-facing assessment \(\widetilde J_t\) enters the measurement path only after realization and admission.
+A learner-facing admitted assessment item \(\widetilde J_t\) enters the measurement path.
 
-The learner produces a raw answer
+The learner produces a raw response
 
 \[
 A_{raw,t}.
 \]
 
-Semantic Interpretation transforms the raw response into a governed semantic representation:
+Semantic Interpretation produces a governed semantic answer:
 
 \[
 S:(\widetilde J_t,A_{raw,t})\rightarrow A_{sem,t}.
 \]
 
-Assessment then evaluates that semantic answer under the fixed assessment semantics in \(A\):
+Assessment evaluates that semantic answer under the fixed assessment semantics:
 
 \[
-\delta:(A_{sem,t},\widetilde J_t)\rightarrow D_t,
+\delta:(A_{sem,t},\widetilde J_t)\rightarrow D_t.
 \]
 
-where \(D_t\) is the criterion-local governed assessment observation in conceptual Teaching-side measurement semantics.
+\(D_t\) is a governed Teaching-side observation object or field **over** conceptual \(Z_T\). It is not learner evidence and is not required to be a total function over \(Z_T\).
 
-The observation is then projected to exact learner evidence through the pre-governed assessment binding:
+Evidence projection then uses the binding fixed in the admitted template:
 
 \[
-T:(D_t,B_J,\Omega)\rightarrow E_t.
+T_{B_J}: Obs_{governed}(Z_T)\rightarrow (Z_{KR}\rightarrow \mathcal E),
 \]
 
-with
+so that
 
 \[
-E_t\in Z_{KR}.
+E_t=T_{B_J}(D_t).
 \]
 
-This gives three distinct objects:
-
-\[
-D_t\neq E_t\neq X_t.
-\]
-
-- \(D_t\): what the assessment observed under its measurement semantics;
-- \(E_t\): governed learner evidence addressed to exact \(K\times R\) coordinates;
-- \(X_t\): persistent estimated learner state accumulated over time.
+The coordinates are already preserved by \(B_J\); projection does not reconstruct or guess them after assessment.
 
 ```mermaid
 flowchart LR
-    JT["Admitted learner-facing J~_t"]
+    JT["Admitted J~_t"]
     AR["Raw answer A_raw,t"]
     AS["Semantic answer A_sem,t"]
-    D["Assessment observation D_t"]
-    E["Evidence E_t over K × R"]
+    D["Teaching-side observation D_t"]
+    BJ["Fixed B_J"]
+    E["Evidence field E_t over Z_KR"]
 
     JT --> AR
     AR -->|"S"| AS
-    AS -->|"delta"| D
-    JT -->|"fixed A and B_J"| D
-    D -->|"T(D, B_J, Ω)"| E
+    AS -->|"δ"| D
+    JT -->|"fixed assessment semantics"| D
+    D -->|"T_BJ"| E
+    BJ -->|"fixed coordinate binding"| E
 ```
 
-Raw learner work is interpreted once at the semantic boundary. Downstream assessment and evidence projection operate on governed semantic artifacts rather than repeatedly reinterpreting the raw answer.
+This keeps three different semantic layers explicit:
+
+- \(D_t\): governed assessment observation over Teaching semantics,
+- \(E_t\): learner evidence field over admitted \(Z_{KR}\),
+- \(X_t\): persistent learner-state field over admitted \(Z_{KR}\).
 
 ---
 
 ## 8. Learner-State Update
 
-Evidence does not become persistent Learner Twin state directly.
+Evidence does not become persistent state directly.
 
-The update path is
+The state path is
 
 \[
 E_t
@@ -417,39 +332,17 @@ Z_t
 X_{t+1}.
 \]
 
-where:
-
 - \(\widehat X_t\) is a session-local state proposal,
-- \(Z_t\) is the admitted state update,
-- \(X_{t+1}\) is persistent longitudinal learner state.
+- \(Z_t\) is an admitted update,
+- \(X_{t+1}\) is persistent longitudinal state.
 
-Longitudinal state remains indexed by the exact Knowledge–Responsibility pair. Evidence attached to one pair does not automatically propagate to another Responsibility or through Knowledge graph relations.
-
-```mermaid
-flowchart LR
-    E["Evidence E_t(K,R)"]
-    XH["Local proposal X_hat_t"]
-    Z["Admitted update Z_t"]
-    X0["Previous X_t(K,R)"]
-    X1["Persistent X_t+1(K,R)"]
-
-    E -->|"U_local"| XH -->|"Admission"| Z
-    X0 -->|"U_long"| X1
-    Z -->|"U_long"| X1
-```
-
-This separation keeps observations, inference, admission, and persistence independently governable.
+The exact \(Z_{KR}\) coordinate is preserved through this pipeline. Evidence for one Responsibility does not automatically alter another Responsibility, and Knowledge graph structure does not imply automatic state propagation.
 
 ---
 
-## 9. The Closed Adaptive Loop
+## 9. Closed Adaptive Assessment Loop
 
-The architecture closes a learning loop by connecting two distinct paths:
-
-1. **control and action realization** — choose and realize what the learner should encounter next;
-2. **measurement and state update** — interpret what happened and update the learner model.
-
-For the assessment modality, the combined loop is
+The validated bounded assessment cycle connects control, realization, measurement, and persistence:
 
 \[
 X_t
@@ -465,111 +358,87 @@ X_t
 \rightarrow A_{sem,t}
 \rightarrow \delta
 \rightarrow D_t
-\rightarrow T
+\rightarrow T_{B_J}
 \rightarrow E_t
-\rightarrow U
+\rightarrow U_{local}
+\rightarrow Admission
+\rightarrow U_{long}
 \rightarrow X_{t+1}.
 \]
 
 ```mermaid
 flowchart LR
-    X["X_t"]
-    PD["PD"]
-    Q["Q_t"]
-    EA["EA assessment"]
-    J["Reusable J"]
-    IM["Inst_M"]
-    AM["Adm_M"]
-    JT["J~_t"]
-    R["Learner response"]
-    S["S"]
-    DELTA["delta"]
-    D["D_t"]
-    T["T"]
-    E["E_t"]
-    U["State update"]
-    X2["X_t+1"]
-
-    X --> PD --> Q --> EA --> J --> IM --> AM --> JT
-    JT --> R --> S --> DELTA --> D --> T --> E --> U --> X2
+    X["X_t"] --> PD["PD"] --> Q["Q_t"] --> EA["EA assessment"]
+    EA --> J["J"] --> IM["Inst_M"] --> AM["Adm_M"] --> JT["J~_t"]
+    JT --> AR["A_raw,t"] --> S["S"] --> AS["A_sem,t"] --> DLT["δ"] --> D["D_t"]
+    D --> T["T_BJ"] --> E["E_t"] --> UL["U_local"] --> AD["Admission"] --> LONG["U_long"] --> X2["X_t+1"]
 ```
 
-The two paths remain conceptually separate even when one application workflow executes them together. Only an admitted realized AssessmentItem enters the assessment measurement path. Non-assessment Educational Actions can participate in the control loop without being treated as mastery evidence.
-
-A separate Educational Action interaction history \(H_{EA,t}\) may eventually record what interventions occurred. That history is not mastery evidence and cannot update learner state except through a separately governed evidence path.
+The architecture closes the learner experience without collapsing semantic responsibilities: decision, realization, interpretation, assessment, evidence, and persistence remain separate governed stages.
 
 ---
 
-## 10. Static and Dynamic Objects
+## 10. Architecture → Implementation Mapping
 
-The mathematical model becomes compact when its objects are grouped by lifecycle.
+The architecture is defined by authority, not by class names. The table below shows where the current bounded implementation materializes each principal object. A conceptual object may have multiple representations or no single runtime class.
 
-### Learner-independent structures
+### 10.1 Principal objects
 
-\[
-K,\ R,\ \Omega,\ P,\ J,\ M,\ A,\ B_J
-\]
+| Object | Architectural meaning | Current implementation / representation | Current maturity |
+|---|---|---|---|
+| \(K\) | Learner-independent Knowledge and mathematical domain semantics | `domain/knowledge/`, `services/knowledge_access/` | `validated_reusable_bounded` |
+| \(R\) | Stable learner-independent, problem-independent observable Responsibility semantics | `authority/knowledge/bounded_responsibilities_v1.yaml`, `domain/teaching/model.py` | `validated_reusable_bounded` |
+| \(Z_{KR}\) | Admitted subset of ambient \(K\times R\) | `authority/knowledge/bounded_responsibility_observation_v1.yaml`; exact admitted-pair records in runtime | `validated_reusable_bounded` |
+| \(P\) | Reusable Teaching policy | `authority/teaching/bounded_pedagogical_decision_policy_v1.yaml` | `implemented_bounded` |
+| \(Z_T\) | Conceptual Teaching observation/evidence/policy semantic space | No single runtime class; materialized through governed Teaching and assessment semantics, notably `domain/teaching/model.py` and assessment structures | conceptual architecture |
+| \(J=(M,A)\) | Admitted reusable assessment template/family | `domain/assessment_item/template.py` (`AssessmentItemTemplate`) | `validated_reusable_bounded` |
+| \(M\) | Knowledge-side mathematical family of an admitted assessment template | `domain/assessment_item/template.py`, `domain/assessment_item/generic_template.py` | `validated_reusable_bounded` |
+| \(A\) | Fixed assessment facet and measurement semantics | `domain/assessment_item/construction.py`, `domain/teaching/model.py`; bound into admitted template runtime | `validated_reusable_bounded` |
+| \(B_J\) | Fixed admitted relation from Teaching observations to exact \(Z_{KR}\) coordinates | `domain/assessment_item/template.py` (`DiagnosticBinding`) | `validated_reusable_bounded` |
+| \(\widetilde M\) | Admitted realized mathematical instance | `domain/assessment_item/realization.py` | `validated_reusable_bounded` |
+| \(\widetilde J=(\widetilde M,A)\) | Learner-facing admitted assessment item | `domain/assessment_item/realization.py` materialization into `domain/assessment_item/model.py` representation | `validated_reusable_bounded` |
+| \(Q_t\) | Transient Educational Action Requirement \((M_t^*,A_t^*)\) | `domain/educational_action/model.py` (`EducationalActionRequirement`) | bounded assessment branch validated; generic EA target-only |
+| \(A_{raw,t}\) | Raw learner response | assessment-turn/application boundary | bounded composition |
+| \(A_{sem,t}\) | Governed semantic interpretation of the response | `domain/semantic_interpretation/`, `services/semantic_interpretation/` | `validated_reusable_bounded` |
+| \(D_t\) | Governed Teaching-side assessment observation object/field over \(Z_T\) | assessment verification/projection services | `validated_reusable_bounded` |
+| \(E_t\) | Learner-evidence field over \(Z_{KR}\) | `services/evidence_projection/answer_assessment_adapter.py`, `services/evidence_projection/knowledge_element_mapping.py` | `validated_reusable_bounded` |
+| \(X_t\) | Persistent learner-state field over \(Z_{KR}\) | `domain/learner/`, `domain/learner_state/`, `services/learner_state/` | `validated_reusable_bounded` for bounded exact-pair path |
 
-These define the semantic and reusable resource substrate.
+### 10.2 Principal maps and transitions
 
-### Learner-specific dynamic objects
+| Map / transition | Architectural role | Current implementation | Current maturity |
+|---|---|---|---|
+| \(I\) | Construct and admit the problem-specific AssessmentSpecification / assessment-facet substrate | `domain/assessment_item/construction.py`, `domain/teaching/model.py` | `validated_reusable_bounded` |
+| \(G\) | Author reusable \(J_{candidate}\) from explicit admitted targets and governed context | `domain/assessment_item/authoring.py`, `domain/assessment_item/construction.py`, `domain/teaching/model.py` | `validated_reusable_bounded` |
+| \(Adm_J\) | Admit reusable assessment template \(J\) | `domain/assessment_item/template.py::admit_assessment_template` | `validated_reusable_bounded` |
+| \(Inst_M\) | Instantiate only the mathematical family using admitted \(\rho\) | `domain/assessment_item/realization.py`, `domain/assessment_item/generic_template.py` | `validated_reusable_bounded` |
+| \(Adm_M\) | Post-instantiation admission of \(\widetilde M\) under admitted-\(J\) context | `domain/assessment_item/realization.py` | `validated_reusable_bounded` |
+| \(PD\) | Sole learner-specific selection of the next educational requirement | `domain/pedagogical_decision/model.py` plus bounded decision services/application flow | `validated_reusable_bounded` for bounded exact-pair selection |
+| \(EA\) | Realize \(Q_t\) into a governed EducationalActionItem without target reselection | `domain/educational_action/`, `services/educational_action/` | generic: `target_only`; assessment fixed-template branch: `validated_reusable_bounded` |
+| \(S\) | Interpret raw learner work into governed semantic answer | `domain/semantic_interpretation/`, `services/semantic_interpretation/` | `validated_reusable_bounded` |
+| \(\delta\) | Assess semantic answer under admitted assessment semantics and produce \(D_t\) | `services/mathematical_verification/`, `services/assessment_policy/`, `services/assessment/verification_projection.py` | `validated_reusable_bounded` |
+| \(T_{B_J}\) | Project governed Teaching observation to evidence field over \(Z_{KR}\) using fixed \(B_J\) | `services/evidence_projection/answer_assessment_adapter.py`, `services/evidence_projection/knowledge_element_mapping.py` | `validated_reusable_bounded` |
+| \(U_{local}\) | Convert evidence into session-local state proposal | `services/learner_state/inference.py`, `domain/learner_state/proposal.py` | `validated_reusable_bounded` |
+| `Admission` | Admit proposed learner-state update | `services/learner_state/admission.py`, `domain/learner/state_admission.py` | `validated_reusable_bounded` |
+| \(U_{long}\) | Combine admitted update with prior persistent state | `services/learner_state/probabilistic_update.py`, `domain/learner/probabilistic_state.py` | `validated_reusable_bounded` |
 
-\[
-X_t,\ Q_t,\ D_t,\ E_t,\ H_{EA,t}.
-\]
+### 10.3 End-to-end composition
 
-Their roles are distinct:
+The current bounded executable proof of the architecture is the adaptive assessment cycle implemented through `application/learning_workflow/assessment_turn.py`, with supporting domain and service modules listed above.
 
-| Symbol | Role | Persistence |
-|---|---|---|
-| \(X_t\) | persistent pair-indexed Learner State | persistent |
-| \(Q_t\) | selected Educational Action requirement | transient |
-| \(D_t\) | assessment observation under Teaching-side semantics | transient |
-| \(E_t\) | exact \(K\times R\) learner evidence event | evidence record / transition input |
-| \(H_{EA,t}\) | Educational Action interaction history | reserved governed history; not mastery state |
-
-This separation is what allows the architecture to evolve without collapsing domain knowledge, learner modeling, pedagogical control, assessment measurement, and interaction history into one state object.
-
----
-
-## 11. Current Implementation Scope
-
-The repository currently validates a bounded end-to-end adaptive assessment composition, while the conceptual architecture is broader.
-
-The strongest validated path covers:
-
-- governed \(K\), \(R\), and partial \(\Omega\),
-- admitted reusable assessment templates \(J=(M,A)\),
-- fixed template-level \(B_J\),
-- bounded mathematical family instantiation \(Inst_M\),
-- separate post-instantiation admission \(Adm_M\),
-- raw-to-semantic answer interpretation \(S\),
-- assessment \(\delta\),
-- exact-pair evidence projection \(T\),
-- local and longitudinal pair-indexed learner-state update,
-- pair-aware Pedagogical Decision,
-- explicit transient \(Q_t\), and
-- the bounded fixed-template Assessment branch of Educational Action realization.
-
-The generic Educational Action architecture is intentionally broader than this bounded implementation. Production-scale resource registries, arbitrary mathematical-family realization, generalized non-assessment realization, production ranking and calibration, and governed persistence of Educational Action history remain later concerns.
-
-The distinction matters: implementation maturity qualifies how much of the architecture has been exercised; it does not redefine the architecture itself.
+That bounded proof establishes the separation of responsibilities and the exact semantic flow. It does not claim production-scale registries, curriculum-wide coverage, arbitrary-family realization, calibrated production ranking, generalized non-assessment action realization, or complete Educational Action history persistence.
 
 ---
 
-## 12. Architectural Invariants
+## 11. Authority and Documentation Boundary
 
-Several invariants organize the whole system:
+This document is explanatory. The current architecture authority remains in `thatao72/three-twin-architecture-next`, primarily:
 
-1. **Persistent memory and active reasoning are separate.** Twins store; agents and Product Capabilities reason and act.
-2. **Mathematical truth remains Knowledge-owned.** Teaching policy may refer to it but does not redefine it.
-3. **Learner state is pair-indexed.** Exact \((K,R)\) state is canonical; K-only summaries are derived views.
-4. **Observation, evidence, and state are different.** \(D\), \(E\), and \(X\) have distinct semantics and transitions.
-5. **Pedagogical selection and realization are separate.** \(PD\) chooses the learner-specific requirement; \(EA\) realizes it without target reselection.
-6. **Reusable assessment templates and concrete items are different.** \(Adm_J\) admits \(J=(M,A)\); \(Inst_M\) realizes \(\widetilde M\); \(Adm_M\) admits the realization; the learner receives \(\widetilde J=(\widetilde M,A)\).
-7. **Assessment bindings are fixed before the answer.** \(A\) and \(B_J\) do not change in response to learner performance.
-8. **Hard requirements fail closed.** Educational Action does not silently relax target, intent, modality, policy, or mandatory constraints.
-9. **Non-assessment actions are not forced through assessment semantics.** Assessment is one modality, not the universal action schema.
-10. **History is not mastery.** Interaction history may inform later decisions but cannot substitute for governed learner evidence.
+- `authority/architecture/three_twin.md`
+- `authority/product_architecture/execution_dependency_model.yaml`
+- `authority/product_architecture/assessment_semantics.yaml`
+- `product/current.yaml`
 
-Together these boundaries produce a system in which AI reasoning can remain flexible while persistent educational semantics stay explicit, inspectable, and governable.
+This version is synchronized to architecture repository main commit `1f673497dfd93a9aa1f7519f5dd1f3055a371222`.
+
+When implementation details and conceptual architecture differ in level of abstraction, the architectural responsibility and authority files govern the interpretation; implementation paths in the tables are traceability references, not definitions of the conceptual model.
