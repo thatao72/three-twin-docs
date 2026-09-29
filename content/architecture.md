@@ -130,7 +130,15 @@ where:
 - \(M\) is the Knowledge-side mathematical family and its governed demand over \(Z_{KR}\),
 - \(A\) is the fixed assessment facet carrying Teaching-side measurement semantics, policy, provenance, and governed bindings.
 
-\(J\) is learner-independent and reusable. It is admitted through
+The canonical authoring map \(G\) constructs a reusable template candidate from explicit admitted Knowledge–Responsibility targets and governed authoring context:
+
+\[
+(KR^*,P,H)\xrightarrow{G}J_{candidate}=(M,A)_{candidate}.
+\]
+
+Here \(H\) denotes learner-independent governed authoring context, including mathematical/problem content, criterion semantics, identifiers, and provenance. Construction of the bounded `AssessmentSpecification` representation of the \(A\)-side is an internal implementation substrate of \(G\), not a separate canonical architecture map.
+
+The resulting \(J_{candidate}\) becomes authoritative only through
 
 \[
 J_{candidate}\xrightarrow{Adm_J}J.
@@ -460,7 +468,7 @@ The architecture is defined by authority, not by class names. The table below sh
 | \(Z_T\) | Conceptual Teaching observation/evidence/policy semantic space | No single runtime class; materialized through governed Teaching and assessment semantics, notably `domain/teaching/model.py` and assessment structures | conceptual architecture |
 | \(J=(M,A)\) | Admitted reusable assessment template/family | `domain/assessment_item/template.py` (`AssessmentItemTemplate`) | `validated_reusable_bounded` |
 | \(M\) | Knowledge-side mathematical family of an admitted assessment template | `domain/assessment_item/template.py`, `domain/assessment_item/generic_template.py` | `validated_reusable_bounded` |
-| \(A\) | Fixed assessment facet and measurement semantics | `domain/assessment_item/construction.py`, `domain/teaching/model.py`; bound into admitted template runtime | `validated_reusable_bounded` |
+| \(A\) | Fixed assessment facet and measurement semantics | Bounded \(G\) materializes the A-side primarily as `AssessmentSpecification` and Teaching structures through `domain/assessment_item/construction.py` and `domain/teaching/model.py`; admitted template structures bind the resulting assessment semantics | `validated_reusable_bounded` for the bounded substrate |
 | \(B_J\) | Fixed admitted relation from Teaching observations to exact \(Z_{KR}\) coordinates | `domain/assessment_item/template.py` (`DiagnosticBinding`) | `validated_reusable_bounded` |
 | \(\widetilde M\) | Admitted realized mathematical instance | `domain/assessment_item/realization.py` | `validated_reusable_bounded` |
 | \(\widetilde J=(\widetilde M,A)\) | Learner-facing admitted assessment item | `domain/assessment_item/realization.py` materialization into `domain/assessment_item/model.py` representation | `validated_reusable_bounded` |
@@ -475,8 +483,7 @@ The architecture is defined by authority, not by class names. The table below sh
 
 | Map / transition | Architectural role | Current implementation | Current maturity |
 |---|---|---|---|
-| \(I\) | Construct and admit the problem-specific AssessmentSpecification / assessment-facet substrate | `domain/assessment_item/construction.py`, `domain/teaching/model.py` | `validated_reusable_bounded` |
-| \(G\) | Author reusable \(J_{candidate}\) from explicit admitted targets and governed context | `domain/assessment_item/authoring.py`, `domain/assessment_item/construction.py`, `domain/teaching/model.py` | `validated_reusable_bounded` |
+| \(G\) | Author reusable \(J_{candidate}=(M,A)_{candidate}\) from explicit admitted \(K\)-\(R\) targets plus governed Teaching/authoring context, without learner-specific target reselection | `domain/assessment_item/authoring.py`; internally uses `domain/assessment_item/construction.py` and `domain/teaching/model.py` to construct the bounded A/`AssessmentSpecification` substrate | `validated_reusable_bounded` for the selected explicit-target authoring substrate |
 | \(Adm_J\) | Admit reusable assessment template \(J\) | `domain/assessment_item/template.py::admit_assessment_template` | `validated_reusable_bounded` |
 | \(Inst_M\) | Map mathematical family \(M\) and admitted family-local \(\rho\) to \(\widetilde M_{candidate}\), under admitted-\(J\) authority | `domain/assessment_item/realization.py`, `domain/assessment_item/generic_template.py` | `validated_reusable_bounded` |
 | \(Adm_M\) | Post-instantiation admission of \(\widetilde M\) under admitted-\(J\) context | `domain/assessment_item/realization.py` | `validated_reusable_bounded` |
@@ -488,6 +495,8 @@ The architecture is defined by authority, not by class names. The table below sh
 | \(U_{local}\) | Convert evidence into session-local state proposal | `services/learner_state/inference.py`, `domain/learner_state/proposal.py` | `validated_reusable_bounded` |
 | `Admission` | Admit proposed learner-state update | `services/learner_state/admission.py`, `domain/learner/state_admission.py` | `validated_reusable_bounded` |
 | \(U_{long}\) | Combine admitted update with prior persistent state | `services/learner_state/probabilistic_update.py`, `domain/learner/probabilistic_state.py` | `validated_reusable_bounded` |
+
+The current bounded implementation of \(G\) should be read as a concrete authoring substrate for the canonical responsibility \(G:(KR^*,P,H)\rightarrow J_{candidate}\). It validates explicit admitted targets, builds target bindings, and constructs the A-side `AssessmentSpecification` candidate. It does **not** yet constitute a fully generalized authoring implementation that directly produces the final `AssessmentItemTemplateCandidate` representation for every assessment family.
 
 ### 10.3 End-to-end composition
 
