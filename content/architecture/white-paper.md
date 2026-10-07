@@ -188,7 +188,7 @@ Crucially, \(D_t\) does not need to collapse immediately to positive/negative ev
 Conceptually:
 
 \[
-(widetilde J_t,A_{raw,t})
+(\widetilde J_t,A_{raw,t})
 \xrightarrow{S}
 A_{sem,t}
 \xrightarrow{\delta}
@@ -205,7 +205,7 @@ Instead, the bridge
 
 \[
 H_z
-]
+\]
 
 maps the rich measurement record into the observation representation required by the Learner model:
 
@@ -323,7 +323,7 @@ Current maturity levels are:
 - **Q3 cross-context validated** — measurement semantics remain stable across separately governed contexts;
 - **Q4 empirically validated** — real learner answers and expert reference annotations support empirical validity claims.
 
-Current governed scope covers Q0-Q2. Q3 is permitted only for explicit bounded cross-context evidence. Q4 remains empirical and out of scope.
+Maturity is dimension-specific. Current bounded evidence exercises some dimensions through Q2, while other declared dimensions remain at Q1 or Q0; therefore no unqualified aggregate maturity above the least-supported declared dimension is claimed. Q3 is permitted only for explicit bounded cross-context evidence. Q4 remains empirical and out of scope.
 
 There is no canonical scalar quality score. False positive evidence for the wrong exact coordinate is treated as more severe than fail-closed abstention, without implying a numeric utility function.
 
