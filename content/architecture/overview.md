@@ -154,35 +154,7 @@ A session-local inference is not persistent state merely because an algorithm or
 
 ---
 
-## 6. Where the objects live
-
-The common \(Z_{KR}\) addressing does not mean all objects belong to one store or one authority. ThreeTwin separates persistent semantic memory from active reasoning.
-
-### Knowledge Twin
-
-Persistent **educational-world memory**. It owns \(K\), \(R\), admitted \(Z_{KR}\), mathematical truth, and the mathematical family \(M\).
-
-### Teaching Twin
-
-Persistent **pedagogical memory**. It owns reusable measurement semantics such as \(Z_T\) and the Teaching-side semantics \(A_J(z)\), together with evidence, ambiguity, assessment, and intervention policy.
-
-### Learner Twin
-
-Persistent **estimated learner-state memory**. It stores accepted \(X_t(z)\) over exact admitted coordinates.
-
-Some important objects deliberately cross or sit outside these persistent authorities:
-
-- \(J=(M,A)\) is an admitted reusable assessment resource spanning Knowledge-side mathematical semantics and Teaching-side measurement semantics;
-- \(D_t(z)\) is a governed response-conditioned measurement object;
-- \(H_z\) is a Teaching–Learner cross-authority map;
-- \(Y_t(z)\) and \(\widehat X_t(z)\) are non-persistent learner-model objects;
-- AI Product Capabilities perform interpretation, inference, pedagogical decision, generation, and other active reasoning.
-
-The Twins store governed memory. They do not reason autonomously or mutate themselves.
-
----
-
-## 7. Decide what should happen before generating it
+## 6. Decide what should happen before generating it
 
 Knowing the learner is useful only if it changes the next educational action.
 
@@ -205,6 +177,35 @@ Q_t(z)
 \(PD\) and \(EA\) are maps or Product Capability operations, not additional persistent semantic objects. The realization must not silently choose a different learner target.
 
 For assessment, generated content remains subject to reusable-family admission and post-instantiation mathematical admission. A generated problem does not become valid simply because a model produced it.
+
+---
+
+## 7. Where the objects live
+
+The common \(Z_{KR}\) addressing does not mean all objects belong to one store or one authority. ThreeTwin separates persistent semantic memory from active reasoning.
+
+### Knowledge Twin
+
+Persistent **educational-world memory**. It owns \(K\), \(R\), admitted \(Z_{KR}\), mathematical truth, and the mathematical family \(M\).
+
+### Teaching Twin
+
+Persistent **pedagogical memory**. It owns reusable measurement semantics such as \(Z_T\) and the Teaching-side semantics \(A_J(z)\), together with evidence, ambiguity, assessment, and intervention policy.
+
+### Learner Twin
+
+Persistent **estimated learner-state memory**. It stores accepted \(X_t(z)\) over exact admitted coordinates.
+
+Some important objects deliberately cross or sit outside these persistent authorities:
+
+- \(J=(M,A)\) is an admitted reusable assessment resource spanning Knowledge-side mathematical semantics and Teaching-side measurement semantics;
+- \(D_t(z)\) is a governed response-conditioned measurement object;
+- \(H_z\) is a Teaching–Learner cross-authority map;
+- \(Y_t(z)\) and \(\widehat X_t(z)\) are non-persistent learner-model objects;
+- \(Q_t(z)\) is a transient exact-coordinate Educational Action requirement connecting learner-informed Pedagogical Decision to Teaching-side realization; it is not persistent Twin state;
+- AI Product Capabilities perform interpretation, inference, pedagogical decision, generation, and other active reasoning.
+
+The Twins store governed memory. They do not reason autonomously or mutate themselves.
 
 ---
 
