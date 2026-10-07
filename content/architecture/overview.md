@@ -154,7 +154,33 @@ A session-local inference is not persistent state merely because an algorithm or
 
 ---
 
-## 6. Where the objects live
+## 6. Decide what should happen before generating it
+
+Knowing the learner is useful only if it changes the next educational action.
+
+Pedagogical Decision reads governed learner state and selects an exact-target Educational Action requirement \(Q_t\). Conceptually, the requirement is addressed to an exact coordinate in the same semantic base:
+
+\[
+X_t
+\xrightarrow{PD}
+Q_t(z).
+\]
+
+Educational Action then realizes that requirement:
+
+\[
+Q_t(z)
+\xrightarrow{EA}
+\text{EducationalActionItem}_t.
+\]
+
+\(PD\) and \(EA\) are maps or Product Capability operations, not additional persistent semantic objects. The realization must not silently choose a different learner target.
+
+For assessment, generated content remains subject to reusable-family admission and post-instantiation mathematical admission. A generated problem does not become valid simply because a model produced it.
+
+---
+
+## 7. Where the objects live
 
 The common \(Z_{KR}\) addressing does not mean all objects belong to one store or one authority. ThreeTwin separates persistent semantic memory from active reasoning.
 
@@ -179,32 +205,6 @@ Some important objects deliberately cross or sit outside these persistent author
 - AI Product Capabilities perform interpretation, inference, pedagogical decision, generation, and other active reasoning.
 
 The Twins store governed memory. They do not reason autonomously or mutate themselves.
-
----
-
-## 7. Decide what should happen before generating it
-
-Knowing the learner is useful only if it changes the next educational action.
-
-Pedagogical Decision reads governed learner state and selects an exact-target Educational Action requirement \(Q_t\). Conceptually, the requirement is addressed to an exact coordinate in the same semantic base:
-
-\[
-X_t
-\xrightarrow{PD}
-Q_t(z).
-\]
-
-Educational Action then realizes that requirement:
-
-\[
-Q_t(z)
-\xrightarrow{EA}
-\text{EducationalActionItem}_t.
-\]
-
-\(PD\) and \(EA\) are maps or Product Capability operations, not additional persistent semantic objects. The realization must not silently choose a different learner target.
-
-For assessment, generated content remains subject to reusable-family admission and post-instantiation mathematical admission. A generated problem does not become valid simply because a model produced it.
 
 ---
 
