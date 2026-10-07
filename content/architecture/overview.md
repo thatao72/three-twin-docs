@@ -114,13 +114,13 @@ The current bounded implementation uses a probabilistic supported/not-supported 
 What is architectural is the contract:
 
 \[
-	ext{measurement}
+\mathrm{measurement}
 \rightarrow
-	ext{learner observation}
+\mathrm{learner\ observation}
 \rightarrow
-	ext{state proposal}
+\mathrm{state\ proposal}
 \rightarrow
-	ext{governed persistence}.
+\mathrm{governed\ persistence}.
 \]
 
 A session-local inference is not persistent state merely because an algorithm or model produced it.
