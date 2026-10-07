@@ -4,21 +4,7 @@
 
 Generative AI can solve problems, explain concepts, and generate exercises. Personalized learning requires something different: a system must decide **what a particular learner's work actually tells us**, preserve that conclusion with appropriate uncertainty, and choose what should happen next.
 
-ThreeTwin treats that as a closed measurement-and-decision loop:
-
-```mermaid
-flowchart LR
-    W["Learning domain"] --> J["Assessment"]
-    J --> D["Measurement"]
-    D --> Y["Learner observation"]
-    Y --> X["Learner state"]
-    X --> Q["Next requirement"]
-    Q --> I["Educational action"]
-    I --> W2["New learner work"]
-    W2 --> D
-```
-
-The architecture is built around a simple discipline: **generated reasoning is not automatically persistent educational truth**.
+ThreeTwin treats that as a governed loop over a common learner-semantic base. The central discipline is simple: **generated reasoning is not automatically persistent educational truth**.
 
 ---
 
@@ -39,7 +25,7 @@ This separation prevents a plausible AI explanation from silently becoming a dur
 
 ---
 
-## 2. Define the learning coordinate before estimating the learner
+## 2. A common semantic base: exact learning coordinates
 
 Knowledge alone is too coarse for learner state. A learner may be able to execute a procedure without being able to justify it, or apply a concept in one context without explaining its meaning.
 
@@ -54,13 +40,29 @@ Not every formal combination is educationally meaningful. The canonical learner-
 Z_{KR}\subseteq K\times R.
 \]
 
-A coordinate \(z\in Z_{KR}\) might mean, for example, *execute the chain rule* or *interpret a derivative in context*. The same Knowledge can therefore support distinct observable responsibilities without collapsing them into one mastery score.
+An exact coordinate \(z\in Z_{KR}\) might mean *execute the chain rule* or *interpret a derivative in context*. The same Knowledge can therefore support distinct observable responsibilities without collapsing them into one mastery score.
 
-Persistent Learner State is addressed on these exact coordinates. Missing evidence for one responsibility is not negative evidence, and evidence for one responsibility does not automatically update another.
+The important architectural idea is that the major learner-facing structures are all addressed over this same semantic base. For a coordinate \(z\), the architecture may have:
+
+\[
+X_t(z),\qquad D_t(z),\qquad Y_t(z),\qquad Q_t(z).
+\]
+
+These are different kinds of objects: persistent learner state, response-conditioned measurement, non-persistent learner observation, and an educational-action requirement. They share an address; they do not share a meaning.
+
+Assessment is also defined over this base, but not necessarily over only one coordinate. A reusable assessment family \(J\) has governed support
+
+\[
+\operatorname{supp}(J)\subseteq Z_{KR},
+\]
+
+so one assessment family may measure several exact learning coordinates while preserving their identities.
+
+This common addressing is what lets ThreeTwin connect assessment, measurement, learner inference, and educational action without turning them into one undifferentiated score or model output.
 
 ---
 
-## 3. Assessment is a measurement instrument
+## 3. Assessment is a measurement instrument over the semantic base
 
 A question is not enough to define what it measures.
 
@@ -73,77 +75,110 @@ J=(M,A),
 where:
 
 - \(M\) is the governed mathematical family;
-- \(A\) supplies reusable Teaching-owned measurement semantics for the relevant learning coordinates.
+- \(A\) supplies reusable Teaching-owned measurement semantics over the supported learning coordinates.
 
-The key design choice is that the measurement semantics are established **before the learner answers**. A concrete realization may expose only the dimensions that can actually be observed. If a dimension is not observable from that response surface, the system emits no observation for it rather than treating absence as failure.
-
-This makes assessment a governed measurement process rather than post-hoc interpretation of an answer.
-
----
-
-## 4. Measurement stays richer than learner state
-
-The learner-facing item and response are interpreted and assessed into a governed measurement record \(D_t\).
-
-\(D_t\) is directly addressed to the exact learning coordinate \(z\) and can retain details such as verification results, criterion conditions, dependencies, provenance, and unresolved or blocking facts. It does not immediately collapse those facts into a coarse positive or negative learner signal.
-
-The current canonical bridge to learner inference is:
+For each supported \(z\),
 
 \[
-D_t \xrightarrow{H_z} Y_t(z,\lambda)
-\xrightarrow{U_{local}} \widehat X_t.
+A_J(z)\subseteq Z_T,
 \]
 
-Here:
+where \(Z_T\) is the Teaching-owned vocabulary of reusable measurement dimensions. The subscript emphasizes that the relevant measurement configuration is the one carried by this assessment family; it does not create a second learner coordinate.
 
-- **\(D_t\)** is the Teaching-side measurement record;
-- **\(H_z\)** is a governed bridge between Teaching measurement meaning and Learner inference requirements;
-- **\(Y_t\)** is a non-persistent learner-model observation;
-- **\(\widehat X_t\)** is a session-local state proposal.
-
-This is a deliberate separation of measurement from inference. The measurement layer preserves what was actually observed; the learner model decides how much that observation should change belief.
-
----
-
-## 5. Learner State is an estimate, not a score
-
-Persistent Learner State \(X_t\) is the system's accepted estimate of the learner over exact admitted \(Z_{KR}\) coordinates.
-
-The current bounded implementation uses a probabilistic supported/not-supported latent state with sequential Bayesian updating. That implementation is intentionally inspectable and bounded; it is not claimed as the globally final learner model.
-
-What is architectural is the contract:
+The key design choice is that these measurement semantics are established **before the learner answers**. A concrete realization may expose only some dimensions:
 
 \[
-\mathrm{measurement}
-\rightarrow
-\mathrm{learner\ observation}
-\rightarrow
-\mathrm{state\ proposal}
-\rightarrow
-\mathrm{governed\ persistence}.
+O_{J,\rho}(z)\subseteq A_J(z).
 \]
 
-A session-local inference is not persistent state merely because an algorithm or model produced it.
+If a dimension is not observable from that response surface, the system emits no observation for it rather than treating absence as failure.
+
+Thus \(J\) is not one question attached to one skill. It is a governed reusable measurement family whose support may span a set of exact \(Z_{KR}\) coordinates.
 
 ---
 
-## 6. Why Three Twins?
+## 4. Measurement stays richer than learner inference
 
-Once the measurement loop is made explicit, three different kinds of persistent educational memory are required.
+A learner-facing item and response are interpreted and assessed into a governed measurement record \(D_t(z)\) at each exact coordinate actually measured.
+
+\(D_t(z)\) can retain verification results, criterion conditions, dependencies, provenance, and unresolved or blocking facts. It does not immediately collapse those facts into a coarse positive or negative learner signal.
+
+The canonical local path is conceptually
+
+\[
+D_t(z)
+\xrightarrow{H_z}
+Y_t(z)
+\xrightarrow{U_{\mathrm{local}}}
+\widehat X_t(z).
+\]
+
+Here \(H_z\) and \(U_{\mathrm{local}}\) are **maps**, not stored objects:
+
+- \(H_z\) translates governed Teaching-side measurement meaning into the observation representation required by the learner model;
+- \(Y_t(z)\) is a non-persistent learner-model observation;
+- \(U_{\mathrm{local}}\) performs local learner-state inference;
+- \(\widehat X_t(z)\) is a session-local state proposal.
+
+The formal learner-observation representation may contain multiple model-specific components \(Y_t(z,\lambda)\). That additional index belongs to the learner model; it does not introduce another persistent learner-state coordinate.
+
+Measurement therefore remains richer than learner inference. The learner model decides how much an observation should change belief; it does not redefine what the assessment observed.
+
+---
+
+## 5. Learner State is a field over the same coordinates
+
+Persistent Learner State is the system's accepted estimate of the learner over the admitted semantic base:
+
+\[
+X_t:Z_{KR}\rightarrow\mathcal X.
+\]
+
+The current bounded implementation uses a probabilistic supported/not-supported latent state with sequential Bayesian updating. That realization is intentionally inspectable and bounded; it is not claimed as the globally final learner model.
+
+What is architectural is the lifecycle:
+
+\[
+D_t(z)
+\rightarrow
+Y_t(z)
+\rightarrow
+\widehat X_t(z)
+\rightarrow
+X_{t+1}(z),
+\]
+
+where the arrows stand for separately governed measurement-to-observation, inference, admission, and persistence operations.
+
+A session-local inference is not persistent state merely because an algorithm or model produced it. Evidence for one \(z\) does not automatically update another, and missing evidence is not negative evidence.
+
+---
+
+## 6. Where the objects live
+
+The common \(Z_{KR}\) addressing does not mean all objects belong to one store or one authority. ThreeTwin separates persistent semantic memory from active reasoning.
 
 ### Knowledge Twin
 
-Persistent **educational-world memory**: concepts, mathematical truth, problem structures, valid transformations, relations, domain error structures, resources, and other learner-independent domain knowledge.
-
-### Learner Twin
-
-Persistent **estimated learner-state memory**: accepted estimates about an individual learner, addressed at the semantic granularity needed to preserve materially different observable performances.
+Persistent **educational-world memory**. It owns \(K\), \(R\), admitted \(Z_{KR}\), mathematical truth, and the mathematical family \(M\).
 
 ### Teaching Twin
 
-Persistent **pedagogical memory**: reusable assessment semantics, evidence and ambiguity policy, instructional strategies, intervention patterns, review policy, and other knowledge about how learning may be measured and guided.
+Persistent **pedagogical memory**. It owns reusable measurement semantics such as \(Z_T\) and the Teaching-side semantics \(A_J(z)\), together with evidence, ambiguity, assessment, and intervention policy.
 
-The Twins store memory. They do not reason autonomously. AI Product Capabilities interpret, diagnose, decide, generate, and propose changes over that memory.
+### Learner Twin
+
+Persistent **estimated learner-state memory**. It stores accepted \(X_t(z)\) over exact admitted coordinates.
+
+Some important objects deliberately cross or sit outside these persistent authorities:
+
+- \(J=(M,A)\) is an admitted reusable assessment resource spanning Knowledge-side mathematical semantics and Teaching-side measurement semantics;
+- \(D_t(z)\) is a governed response-conditioned measurement object;
+- \(H_z\) is a Teaching–Learner cross-authority map;
+- \(Y_t(z)\) and \(\widehat X_t(z)\) are non-persistent learner-model objects;
+- AI Product Capabilities perform interpretation, inference, pedagogical decision, generation, and other active reasoning.
+
+The Twins store governed memory. They do not reason autonomously or mutate themselves.
 
 ---
 
@@ -151,105 +186,49 @@ The Twins store memory. They do not reason autonomously. AI Product Capabilities
 
 Knowing the learner is useful only if it changes the next educational action.
 
-Pedagogical Decision reads governed learner state and produces an exact-target Educational Action requirement \(Q_t\). That requirement specifies what should be addressed and the constraints that the next action must satisfy.
+Pedagogical Decision reads governed learner state and selects an exact-target Educational Action requirement \(Q_t\). Conceptually, the requirement is addressed to an exact coordinate in the same semantic base:
 
-Educational Action realization then finds or constructs a learner-facing item that satisfies the requirement. It must not silently choose a different learner target.
+\[
+X_t
+\xrightarrow{PD}
+Q_t(z).
+\]
 
-For assessment, the same principle applies to generated content: reusable assessment-family admission and post-instantiation mathematical admission are explicit boundaries. A generated problem does not become valid simply because a model produced it.
+Educational Action then realizes that requirement:
+
+\[
+Q_t(z)
+\xrightarrow{EA}
+\text{EducationalActionItem}_t.
+\]
+
+\(PD\) and \(EA\) are maps or Product Capability operations, not additional persistent semantic objects. The realization must not silently choose a different learner target.
+
+For assessment, generated content remains subject to reusable-family admission and post-instantiation mathematical admission. A generated problem does not become valid simply because a model produced it.
 
 ---
 
 ## 8. The closed learning loop
 
-The resulting conceptual loop is:
+The architecture can now be read as a loop of **objects over a common semantic base**, connected by explicitly named operations:
 
 ```mermaid
 flowchart LR
-    X["Persistent learner state X_t"] -->|"Pedagogical Decision"| Q["Requirement Q_t"]
-    Q -->|"Educational Action"| J["Learner-facing item"]
+    X["Persistent state X_t(z)"] -->|"PD"| Q["Requirement Q_t(z)"]
+    Q -->|"EA"| J["Admitted learner-facing assessment item J~"]
     J --> R["Learner response"]
-    R --> D["Governed measurement D_t"]
-    D --> H["H: measurement → learner observation"]
-    H --> Y["Y_t"]
-    Y --> U["Local inference"]
-    U --> A["Governed state transition"]
-    A --> X2["Persistent state X_t+1"]
+    R -->|"interpret + assess"| D["Measurement D_t(z)"]
+    D -->|"H_z"| Y["Learner observation Y_t(z)"]
+    Y -->|"U_local"| XH["State proposal X_hat_t(z)"]
+    XH -->|"governed admission + persistence"| X2["Persistent state X_t+1(z)"]
 ```
 
-The important property is not the number of boxes. It is that each transition has a distinct semantic responsibility. AI reasoning can improve without allowing model output to redefine mathematical truth, measurement meaning, or persistent learner state.
+The boxes are semantic or lifecycle objects; the edge labels are maps, Product Capability operations, or governed transitions.
+
+The important property is not the number of boxes. It is that the same exact learner-semantic coordinates remain identifiable across assessment support, measurement, learner observation, state, and educational requirements while each layer retains its own authority and meaning.
+
+That is the distinctive ThreeTwin architecture: **a shared semantic base without semantic collapse, and active AI reasoning without allowing model output to become persistent educational truth by default.**
 
 ---
 
-## 9. Scaling across a curriculum
-
-Curriculum scale is treated as a coverage problem, not as automatic ontology generation.
-
-The current expansion discipline proceeds through:
-
-```mermaid
-flowchart LR
-    C["Versioned curriculum view"] --> K["K representation"]
-    K --> R["R observability"]
-    R --> Z["Z_KR admission"]
-    Z --> J["Assessment inventory"]
-    J --> DD["Diagnostic discrimination"]
-    DD --> RV["Runtime validation"]
-```
-
-A syllabus heading does not automatically become Knowledge. Responsibility is not derived from topic names. Coverage is multidimensional and is not reduced to one canonical percentage.
-
-Explicit gaps are preferable to invented semantics.
-
----
-
-## 10. Measurement quality is a separate question
-
-Semantic admission answers **whether an object is well-defined and governed**. It does not prove that an assessment measures well.
-
-ThreeTwin therefore treats measurement quality as an orthogonal projection:
-
-- **Q0 — admitted only**
-- **Q1 — contrastively validated**
-- **Q2 — adversarially validated**
-- **Q3 — cross-context validated**
-- **Q4 — empirically validated with real learner answers and expert reference annotations**
-
-Maturity is **dimension-specific**. The current governance framework exercises bounded dimensions through Q2, but this does not imply that the architecture as a whole has reached Q2: unqualified aggregate maturity cannot exceed the least-supported declared dimension. Q3 requires explicit bounded cross-context evidence, and Q4 remains empirical and out of scope.
-
-A quality failure produces a quality gap; it does not silently rewrite Knowledge, Responsibility, learner coordinates, or assessment semantics.
-
----
-
-## 11. Concept, mathematics, implementation
-
-ThreeTwin documentation deliberately separates three layers.
-
-**Conceptual architecture** explains durable responsibilities: persistent memory versus reasoning, measurement versus inference, three Twin responsibilities, and governed state change.
-
-**Mathematical architecture** makes those responsibilities precise through objects such as \(Z_{KR}\), \(J=(M,A)\), \(D_t\), \(H\), \(Y_t\), and \(X_t\).
-
-**Implementation** is the current bounded realization of those contracts. Files, classes, models, storage, and agent frameworks are replaceable and do not define the conceptual architecture.
-
-The current implementation provides bounded reusable proof of important paths. It does not claim curriculum-wide, population-calibrated, production-ready personalization.
-
----
-
-## 12. The architectural invariants
-
-The architecture can be summarized by a small set of separations:
-
-- mathematical truth is not pedagogical policy;
-- learner response is not learner state;
-- measurement is not learner inference;
-- learner-model observation is not persistent state;
-- pedagogical decision is not content realization;
-- generated output is not admitted authority;
-- semantic admission is not measurement quality;
-- curriculum coverage is not measurement quality;
-- implementation topology is not conceptual architecture.
-
-These boundaries allow ThreeTwin to use increasingly capable AI models while keeping educational meaning, measurement, and persistent learner state governed and inspectable.
-
----
-
-For the formal model, current bounded realization, compatibility boundaries, and validation status, see the **Architecture Technical White Paper**.
+For the formal model, bounded realization, quality and coverage governance, and validation status, see the **Architecture Technical White Paper**.
