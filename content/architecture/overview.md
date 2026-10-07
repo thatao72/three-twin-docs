@@ -214,7 +214,7 @@ ThreeTwin therefore treats measurement quality as an orthogonal projection:
 - **Q3 — cross-context validated**
 - **Q4 — empirically validated with real learner answers and expert reference annotations**
 
-The current governed scope supports Q0-Q2, with bounded Q3 pilots permitted where explicit evidence exists. Q4 remains empirical and out of scope.
+Maturity is **dimension-specific**. The current governance framework exercises bounded dimensions through Q2, but this does not imply that the architecture as a whole has reached Q2: unqualified aggregate maturity cannot exceed the least-supported declared dimension. Q3 requires explicit bounded cross-context evidence, and Q4 remains empirical and out of scope.
 
 A quality failure produces a quality gap; it does not silently rewrite Knowledge, Responsibility, learner coordinates, or assessment semantics.
 
