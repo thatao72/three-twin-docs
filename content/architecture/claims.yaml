@@ -95,9 +95,26 @@ claims:
       - authority/quality/measurement_quality_governance_v1.yaml
     surfaces: [whitepaper]
 
-  - id: learner_state_is_probabilistic_estimate
+  - id: learner_state_is_exact_pair_estimate
     layer: mathematical
-    statement: Current bounded Learner State uses exact-pair probabilistic posterior belief with sequential Bayesian update, while the architecture does not claim this bounded representation is globally final.
+    statement: X_t is estimated learner state addressed over exact admitted Z_KR coordinates and remains distinct from measurement records and non-persistent learner observations.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/product_architecture/probabilistic_learner_state.yaml
+    surfaces: [web, whitepaper]
+
+  - id: local_inference_requires_governed_persistence
+    layer: conceptual
+    statement: Local inference produces a non-persistent state proposal X_hat; persistent Learner State changes only through an explicit governed admission and longitudinal transition.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/product_architecture/execution_dependency_model.yaml
+      - authority/product_architecture/probabilistic_learner_state.yaml
+    surfaces: [web, whitepaper]
+
+  - id: bounded_probabilistic_state_realization
+    layer: implementation
+    statement: The current bounded learner-state realization uses binary supported-or-not-supported latent state with sequential Bayesian updating and does not establish a globally final state representation.
     authority:
       - authority/product_architecture/probabilistic_learner_state.yaml
     surfaces: [web, whitepaper]
@@ -135,14 +152,21 @@ claims:
 
   - id: quality_maturity_is_dimension_specific
     layer: implementation
-    statement: Measurement quality progresses from Q0 admitted-only through contrastive, adversarial, cross-context, and empirical validation; current governed scope reaches Q0-Q2 with bounded Q3 pilots and Q4 out of scope.
+    statement: Measurement quality maturity is dimension-specific. The governance framework defines Q0-Q4 and current bounded evidence exercises some dimensions through Q2, but no unqualified aggregate maturity above the least-supported declared dimension is permitted; Q3 requires explicit bounded cross-context evidence and Q4 remains empirical and out of scope.
     authority:
       - authority/quality/measurement_quality_governance_v1.yaml
     surfaces: [web, whitepaper]
 
-  - id: curriculum_scaling_is_bounded_and_multidimensional
+  - id: curriculum_scaling_is_governed_and_multidimensional
     layer: conceptual
-    statement: Curriculum expansion proceeds through versioned curriculum view, K representation, R observability, Z_KR admission, J inventory, diagnostic discrimination, and runtime validation; coverage is not a single canonical percentage.
+    statement: Curriculum scaling is governed, multidimensional, and fail-closed; external curriculum structure does not automatically create Knowledge, Responsibility, learner coordinates, or assessment authority.
+    authority:
+      - authority/knowledge/coverage_expansion_protocol_v2.yaml
+    surfaces: [web, whitepaper]
+
+  - id: current_curriculum_coverage_protocol
+    layer: implementation
+    statement: The current bounded coverage protocol proceeds through versioned curriculum view, K representation, R observability, Z_KR admission, J inventory and admission, diagnostic discrimination, runtime validation, and typed gaps.
     authority:
       - authority/knowledge/coverage_expansion_protocol_v2.yaml
     surfaces: [web, whitepaper]
