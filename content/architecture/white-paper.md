@@ -107,6 +107,20 @@ X_t:Z_{KR}\rightarrow\mathcal X.
 
 The current bounded model uses a binary supported/not-supported latent representation with posterior probability, but exact-pair addressing is more fundamental than that particular state representation.
 
+This admitted domain is the common semantic base for the major learner-facing structures. They are not the same mathematical kind, but they preserve exact addressing over the same base:
+
+\[
+\begin{aligned}
+X_t &: Z_{KR}\rightarrow\mathcal X,\\
+D_t &: z\mapsto D_t(z),\\
+Y_t &: z\mapsto Y_t(z,\lambda),\\
+Q_t &: \text{exact-}z\text{-addressed requirement},\\
+J &: \operatorname{supp}(J)\subseteq Z_{KR}.
+\end{aligned}
+\]
+
+This should be read as a common-base discipline, not as a claim that all objects are one uniform data structure. \(X\) is persistent learner state; \(D\) is response-conditioned measurement; \(Y\) is a non-persistent learner-model observation; \(Q\) is a transient educational-action requirement; and \(J\) is a reusable assessment family whose governed support may contain multiple exact coordinates.
+
 The following invariants apply:
 
 - exact-pair evidence does not collapse automatically to Knowledge-only state;
@@ -249,23 +263,7 @@ X_{t+1}.
 
 The architectural requirement is not that every future learner model must remain binary or use the current likelihood templates. It is that measurement, learner observation, inference proposal, and persistent state remain distinct governed objects or transitions.
 
-## 10. Historical compatibility boundary
-
-Earlier bounded implementations used evidence-projection objects conventionally described as \(T\) and \(E_t\).
-
-Those objects remain useful for historical evaluation, provenance, and one-way persisted-record compatibility, but they are **not the canonical current measurement-to-state path**.
-
-Current architecture requires validation of the live
-
-\[
-D\rightarrow H\rightarrow Y\rightarrow U_{local}
-\]
-
-path. Historical \(E/T\) comparisons cannot establish preservation of \(H\), \(Y\), or current local inference.
-
-This distinction is an implementation migration boundary, not a new educational concept.
-
-## 11. Educational decision and action
+## 10. Educational decision and action
 
 Pedagogical Decision is the learner-specific selector. It reads governed learner state and produces an Educational Action requirement \(Q_t\) addressed to an exact \(z\in Z_{KR}\), together with action and realization constraints.
 
@@ -285,7 +283,7 @@ The realization layer may perform hard eligibility, governed fit, permitted real
 
 Thus personalization is separated into **deciding what is required** and **realizing content that satisfies that requirement**.
 
-## 12. Closed adaptive loop
+## 11. Closed adaptive loop
 
 For the currently validated assessment-oriented path, the conceptual loop can be read as:
 
@@ -309,7 +307,7 @@ The architecture closes the learner loop without collapsing reusable semantic me
 
 # Part III — Quality, Scale, and Implementation
 
-## 13. Measurement quality is orthogonal to semantic admission
+## 12. Measurement quality is orthogonal to semantic admission
 
 A semantically admitted Knowledge element, Responsibility, exact coordinate, or AssessmentItem may still measure poorly.
 
@@ -327,7 +325,7 @@ Maturity is dimension-specific. Current bounded evidence exercises some dimensio
 
 There is no canonical scalar quality score. False positive evidence for the wrong exact coordinate is treated as more severe than fail-closed abstention, without implying a numeric utility function.
 
-## 14. Curriculum-scale coverage
+## 13. Curriculum-scale coverage
 
 Curriculum expansion is governed separately from semantic truth and measurement quality.
 
@@ -358,7 +356,7 @@ Important invariants include:
 
 Coverage asks whether the required semantic and measurement inventory exists. Measurement-quality governance separately asks whether that inventory measures well.
 
-## 15. Current bounded implementation
+## 14. Current bounded implementation
 
 The current repository materializes the architecture through domain, service, application, authority, and evaluation layers. The architecture is not defined by those paths, but they provide executable evidence that the semantic boundaries can be realized.
 
@@ -374,7 +372,7 @@ Notable current implementation areas include:
 
 The live bounded path and persistence work are implementation evidence, not new conceptual layers.
 
-## 16. What the current implementation proves — and does not prove
+## 15. What the current implementation proves — and does not prove
 
 The current bounded substrate provides reusable evidence for:
 
@@ -406,7 +404,7 @@ These are intentionally distinct claims rather than implicit consequences of arc
 
 # Part IV — Architectural Interpretation
 
-## 17. Why the architecture is resilient to model change
+## 16. Why the architecture is resilient to model change
 
 The architecture does not assume that one foundation model, prompting strategy, agent framework, or inference algorithm remains optimal.
 
@@ -421,7 +419,7 @@ Replaceable AI components may become substantially more capable. The stable cont
 
 This permits model improvement without making model behavior itself the educational authority.
 
-## 18. Compact invariant set
+## 17. Compact invariant set
 
 The architecture can be reviewed through the following invariants:
 
@@ -442,7 +440,7 @@ Together these constraints define ThreeTwin more durably than any current class,
 
 ---
 
-## 19. Documentation and authority boundary
+## 18. Documentation and authority boundary
 
 This White Paper is a publication surface, not architecture authority.
 
