@@ -179,7 +179,7 @@ The learner-facing realized item is then
 The Teaching measurement semantics remain fixed across permitted realizations. A particular realization exposes an observable subset
 
 \[
-O_{J,\rho}(z)\subseteq A(z).
+O_{J,\rho}(z)\subseteq A_J(z).
 \]
 
 An unobservable dimension produces no observation; absence is not converted into negative learner evidence.
