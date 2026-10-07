@@ -129,7 +129,7 @@ claims:
 
   - id: decide_before_realize
     layer: conceptual
-    statement: Pedagogical Decision selects an exact-z Educational Action requirement Q; realization must satisfy that requirement rather than reselecting the learner target.
+    statement: Pedagogical Decision selects a transient exact-z Educational Action requirement Q; Q is not persistent Twin state, and realization must satisfy that requirement rather than reselecting the learner target.
     authority:
       - authority/architecture/three_twin.md
       - authority/product_architecture/execution_dependency_model.yaml
