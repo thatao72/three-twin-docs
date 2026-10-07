@@ -1,11 +1,15 @@
 # ThreeTwinDocs
 
-Public explanatory documentation for ThreeTwinArchitectureNext.
+Public explanatory documentation for ThreeTwin.
 
-The documentation is intended to explain the architecture from enduring principles through mathematical realization and runtime traceability. It is descriptive, not authoritative: current architecture authority remains in `thatao72/three-twin-architecture-next`.
+Architecture documentation is descriptive, not authoritative. Current architecture authority remains in `thatao72/three-twin-architecture-next`.
 
-The primary architecture explanation is:
+## Architecture publications
 
-- `content/architecture.md`
+- **Web overview:** `content/architecture/overview.md`
+- **Technical White Paper:** `content/architecture/white-paper.md`
+- **Publication claim registry:** `content/architecture/claims.yaml`
 
-The published site renders this material for readers who do not need repository-level implementation context first.
+The two publication surfaces are built from the same governed claim set but serve different reading modes. The Web overview explains the architecture from first principles; the White Paper provides formal semantics, implementation boundaries, and technical due-diligence detail.
+
+Architecture documentation is maintained in three explicit layers: conceptual, mathematical, and implementation. The claim registry records the ArchitectureNext source checkpoint and maps publication claims to their authority sources so future architecture changes can be reviewed by semantic impact rather than by rewriting every document from scratch.

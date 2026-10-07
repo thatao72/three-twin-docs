@@ -1,0 +1,188 @@
+schema_version: 1
+role: architecture_publication_claim_registry
+status: current
+source_checkpoint:
+  repository: thatao72/three-twin-architecture-next
+  reviewed_commit: 0ec25c3efcc321a15b6f3d5a2c9777916d679098
+  prior_docs_checkpoint: 1f673497dfd93a9aa1f7519f5dd1f3055a371222
+  review_scope: current authority plus semantic-impact review of the intervening architecture changes
+
+publication_layers:
+  conceptual:
+    purpose: durable explanation of why the architecture is structured as it is
+  mathematical:
+    purpose: formal objects and maps that make the conceptual separation precise
+  implementation:
+    purpose: current bounded realization and validation boundary; never defines conceptual authority
+
+claims:
+  - id: persistent_memory_active_reasoning_separation
+    layer: conceptual
+    statement: Twins persist structured educational memory; AI Product Capabilities reason and act over it.
+    authority:
+      - authority/architecture/three_twin.md
+    surfaces: [web, whitepaper]
+
+  - id: three_distinct_persistent_memories
+    layer: conceptual
+    statement: Knowledge, Learner, and Teaching Twins preserve distinct educational-world, learner-state, and pedagogical memory responsibilities.
+    authority:
+      - authority/architecture/three_twin.md
+    surfaces: [web, whitepaper]
+
+  - id: learner_response_is_not_state
+    layer: conceptual
+    statement: Learner behavior and assessment observations are inputs to inference, not persistent Learner Twin state by themselves.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/product_architecture/probabilistic_learner_state.yaml
+    surfaces: [web, whitepaper]
+
+  - id: exact_admitted_learning_coordinate
+    layer: mathematical
+    statement: Canonical learner semantics are addressed on admitted exact Knowledge-Responsibility coordinates z in Z_KR, a governed subset of K x R.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/product_architecture/execution_dependency_model.yaml
+    surfaces: [web, whitepaper]
+
+  - id: teaching_measurement_vocabulary
+    layer: mathematical
+    statement: Z_T is a reusable Teaching-owned measurement-semantics vocabulary; it does not own mathematical truth or learner coordinates.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/teaching/measurement_semantics_v1.yaml
+    surfaces: [whitepaper]
+
+  - id: assessment_is_reusable_measurement_family
+    layer: conceptual
+    statement: An admitted AssessmentItem J=(M,A) is a reusable learner-independent measurement family combining Knowledge-side mathematical semantics with Teaching-owned measurement semantics.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/product_architecture/assessment_semantics.yaml
+    surfaces: [web, whitepaper]
+
+  - id: measurement_semantics_precede_response
+    layer: mathematical
+    statement: Reusable A(z) measurement semantics are fixed before the learner response; realization may expose only observable dimensions and unobservable dimensions emit no observation.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/product_architecture/assessment_semantics.yaml
+    surfaces: [web, whitepaper]
+
+  - id: observation_is_rich_and_exactly_addressed
+    layer: mathematical
+    statement: D_t is a governed response-conditioned measurement record directly addressed to exact z and typed by Teaching measurement dimensions, preserving verification, conditions, dependencies, provenance, and unresolved facts.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/product_architecture/execution_dependency_model.yaml
+    surfaces: [web, whitepaper]
+
+  - id: canonical_measurement_to_state_bridge
+    layer: mathematical
+    statement: Canonical local inference is D -> H -> Y -> U_local; H is a cross-authority bridge and Y is a non-persistent learner-model observation distinct from D and persistent X.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/product_architecture/probabilistic_learner_state.yaml
+      - authority/product_architecture/execution_dependency_model.yaml
+    surfaces: [web, whitepaper]
+
+  - id: historical_evidence_projection_is_compatibility_only
+    layer: implementation
+    statement: Historical T and E evidence-projection objects remain compatibility/evaluation representations and are not canonical current measurement-to-state operators.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/quality/measurement_quality_governance_v1.yaml
+    surfaces: [whitepaper]
+
+  - id: learner_state_is_exact_pair_estimate
+    layer: mathematical
+    statement: X_t is estimated learner state addressed over exact admitted Z_KR coordinates and remains distinct from measurement records and non-persistent learner observations.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/product_architecture/probabilistic_learner_state.yaml
+    surfaces: [web, whitepaper]
+
+  - id: local_inference_requires_governed_persistence
+    layer: conceptual
+    statement: Local inference produces a non-persistent state proposal X_hat; persistent Learner State changes only through an explicit governed admission and longitudinal transition.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/product_architecture/execution_dependency_model.yaml
+      - authority/product_architecture/probabilistic_learner_state.yaml
+    surfaces: [web, whitepaper]
+
+  - id: bounded_probabilistic_state_realization
+    layer: implementation
+    statement: The current bounded learner-state realization uses binary supported-or-not-supported latent state with sequential Bayesian updating and does not establish a globally final state representation.
+    authority:
+      - authority/product_architecture/probabilistic_learner_state.yaml
+    surfaces: [web, whitepaper]
+
+  - id: no_cross_coordinate_propagation
+    layer: conceptual
+    statement: Evidence for one Responsibility does not update another by default; missing evidence is not negative evidence and Knowledge graph relations do not imply learner-state propagation.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/product_architecture/probabilistic_learner_state.yaml
+    surfaces: [web, whitepaper]
+
+  - id: decide_before_realize
+    layer: conceptual
+    statement: Pedagogical Decision selects an exact-z Educational Action requirement Q; realization must satisfy that requirement rather than reselecting the learner target.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/product_architecture/execution_dependency_model.yaml
+    surfaces: [web, whitepaper]
+
+  - id: generated_content_requires_admission
+    layer: conceptual
+    statement: Reusable assessment-family admission and post-instantiation mathematical admission are separate; generated or realized content does not become learner-facing merely because a model produced it.
+    authority:
+      - authority/architecture/three_twin.md
+      - authority/product_architecture/assessment_semantics.yaml
+    surfaces: [web, whitepaper]
+
+  - id: measurement_quality_is_orthogonal
+    layer: conceptual
+    statement: Semantic admission, curriculum coverage, and measurement quality are distinct; a semantically admitted object can still have insufficient measurement quality.
+    authority:
+      - authority/quality/measurement_quality_governance_v1.yaml
+    surfaces: [web, whitepaper]
+
+  - id: quality_maturity_is_dimension_specific
+    layer: implementation
+    statement: Measurement quality maturity is dimension-specific. The governance framework defines Q0-Q4 and current bounded evidence exercises some dimensions through Q2, but no unqualified aggregate maturity above the least-supported declared dimension is permitted; Q3 requires explicit bounded cross-context evidence and Q4 remains empirical and out of scope.
+    authority:
+      - authority/quality/measurement_quality_governance_v1.yaml
+    surfaces: [web, whitepaper]
+
+  - id: curriculum_scaling_is_governed_and_multidimensional
+    layer: conceptual
+    statement: Curriculum scaling is governed, multidimensional, and fail-closed; external curriculum structure does not automatically create Knowledge, Responsibility, learner coordinates, or assessment authority.
+    authority:
+      - authority/knowledge/coverage_expansion_protocol_v2.yaml
+    surfaces: [web, whitepaper]
+
+  - id: current_curriculum_coverage_protocol
+    layer: implementation
+    statement: The current bounded coverage protocol proceeds through versioned curriculum view, K representation, R observability, Z_KR admission, J inventory and admission, diagnostic discrimination, runtime validation, and typed gaps.
+    authority:
+      - authority/knowledge/coverage_expansion_protocol_v2.yaml
+    surfaces: [web, whitepaper]
+
+  - id: implementation_does_not_define_architecture
+    layer: implementation
+    statement: Files, classes, models, storage and agent frameworks are replaceable realizations; conceptual responsibility and semantic authority remain primary.
+    authority:
+      - authority/architecture/three_twin.md
+    surfaces: [web, whitepaper]
+
+  - id: bounded_runtime_is_proof_not_production_claim
+    layer: implementation
+    statement: The current runtime demonstrates bounded reusable architecture paths and measurement preservation without claiming curriculum-wide, population-calibrated, production-ready personalization.
+    authority:
+      - authority/product_architecture/probabilistic_learner_state.yaml
+      - authority/quality/measurement_quality_governance_v1.yaml
+      - authority/knowledge/coverage_expansion_protocol_v2.yaml
+    surfaces: [web, whitepaper]
