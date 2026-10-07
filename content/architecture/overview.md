@@ -202,6 +202,7 @@ Some important objects deliberately cross or sit outside these persistent author
 - \(D_t(z)\) is a governed response-conditioned measurement object;
 - \(H_z\) is a Teaching–Learner cross-authority map;
 - \(Y_t(z)\) and \(\widehat X_t(z)\) are non-persistent learner-model objects;
+- \(Q_t(z)\) is a transient exact-coordinate Educational Action requirement connecting learner-informed Pedagogical Decision to Teaching-side realization; it is not persistent Twin state;
 - AI Product Capabilities perform interpretation, inference, pedagogical decision, generation, and other active reasoning.
 
 The Twins store governed memory. They do not reason autonomously or mutate themselves.
