@@ -186,7 +186,7 @@ The Twins store governed memory. They do not reason autonomously or mutate thems
 
 Knowing the learner is useful only if it changes the next educational action.
 
-Pedagogical Decision reads governed learner state and selects an exact-target Educational Action requirement \(Q_t\). Conceptually, the requirement is addressed to one or more exact coordinates in the same semantic base:
+Pedagogical Decision reads governed learner state and selects an exact-target Educational Action requirement \(Q_t\). Conceptually, the requirement is addressed to an exact coordinate in the same semantic base:
 
 \[
 X_t
@@ -215,7 +215,7 @@ The architecture can now be read as a loop of **objects over a common semantic b
 ```mermaid
 flowchart LR
     X["Persistent state X_t(z)"] -->|"PD"| Q["Requirement Q_t(z)"]
-    Q -->|"EA"| J["Learner-facing item J~"]
+    Q -->|"EA"| J["Admitted learner-facing assessment item J~"]
     J --> R["Learner response"]
     R -->|"interpret + assess"| D["Measurement D_t(z)"]
     D -->|"H_z"| Y["Learner observation Y_t(z)"]
