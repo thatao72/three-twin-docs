@@ -19,7 +19,7 @@ The current canonical measurement-to-state path is
 \[
 D_t \xrightarrow{H_z} Y_t(z,\lambda)
 \xrightarrow{U_{local}} \widehat X_t
-\rightarrow \text{governed state transition}
+\rightarrow \mathrm{governed\ state\ transition}
 \rightarrow X_{t+1}.
 \]
 
@@ -38,15 +38,15 @@ A learner response is compatible with multiple causal explanations. An incorrect
 ThreeTwin therefore treats personalization as a sequence of governed transformations rather than a direct model judgment:
 
 \[
-\text{learner interaction}
+\mathrm{learner\ interaction}
 \rightarrow
-\text{measurement}
+\mathrm{measurement}
 \rightarrow
-\text{learner observation}
+\mathrm{learner\ observation}
 \rightarrow
-\text{state inference}
+\mathrm{state\ inference}
 \rightarrow
-\text{educational decision}.
+\mathrm{educational\ decision}.
 \]
 
 The architecture is designed so that each transformation has an explicit semantic responsibility.
@@ -240,7 +240,7 @@ Persistence remains separately governed. At a high level:
 \[
 \widehat X_t
 \rightarrow
-\text{Admission}
+\mathrm{Admission}
 \rightarrow
 U_{long}(X_t,\cdot)
 \rightarrow
@@ -334,7 +334,7 @@ Curriculum expansion is governed separately from semantic truth and measurement 
 The canonical chain is:
 
 \[
-\text{versioned curriculum view}
+\mathrm{versioned\ curriculum\ view}
 \rightarrow K
 \rightarrow R
 \rightarrow Z_{KR}
@@ -343,9 +343,9 @@ The canonical chain is:
 \rightarrow Adm_J
 \rightarrow J
 \rightarrow
-\text{response discrimination}
+\mathrm{response\ discrimination}
 \rightarrow
-\text{typed gaps}.
+\mathrm{typed\ gaps}.
 \]
 
 Important invariants include:
