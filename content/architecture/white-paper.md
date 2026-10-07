@@ -135,13 +135,15 @@ Let \(Z_T\) denote the reusable Teaching-owned measurement-semantics vocabulary/
 
 \(Z_T\) names dimensions through which an assessment may measure performance. It does not own mathematical truth and it does not create learner coordinates.
 
-For an exact learning coordinate \(z\in Z_{KR}\), reusable assessment semantics are conceptually addressed as
+For an exact learning coordinate \(z\in Z_{KR}\) supported by a particular assessment family \(J\), reusable assessment semantics are conceptually addressed as
 
 \[
-A(z)\subseteq Z_T.
+A_J(z)\subseteq Z_T.
 \]
 
-Because \(z\) already supplies Knowledge and Responsibility identity, \(A(z)\) should not redundantly encode another K/R identity.
+The subscript makes the family-relative configuration explicit. Canonical authority may write this more compactly as \(A(z)\) when \(J\) is already fixed.
+
+Because \(z\) already supplies Knowledge and Responsibility identity, \(A_J(z)\) should not redundantly encode another K/R identity.
 
 This separation is important: the learner coordinate states **what educational performance is being modeled**; the Teaching measurement dimensions state **what an assessment can observe about that performance**.
 
